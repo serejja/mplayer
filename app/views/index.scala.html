@@ -1,7 +1,29 @@
 @(message: String)
 
-@main("Welcome to Play 2.1") {
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("mplayer") {
+
+    <a id="play" href="#" class="btn btn-danger btn-mini">Go!</a>
     
-    @play20.welcome(message)
-    
+
+    <script type="text/javascript">
+	 $(document).ready(function(){
+	  $("#jquery_jplayer_1").jPlayer({
+	   ready: function () {
+	    $(this).jPlayer("setMedia", {
+	     m4a: "/get",
+	    });
+	   },
+	   swfPath: "/js",
+	   supplied: "m4a"
+	  });
+	 });
+	</script>
+	<div id="jquery_jplayer_1"></div>
+	<div id="jp_container_1">
+	 <a href="#" class="jp-play">Play</a>
+	 <a href="#" class="jp-pause">Pause</a>
+	</div>
 }

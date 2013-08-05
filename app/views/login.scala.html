@@ -1,0 +1,17 @@
+@(userForm: Form[com.github.serejja.mplayer.models.User])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Login") {
+    <div class="row" style="margin-top: 25%"></div>
+    <div class="row">
+        <div class="span6 offset5">
+            @form(routes.Application.login, args = 'id -> "userform", '_class -> "form-horizontal") {
+                @inputText(userForm("name"))
+                @inputPassword(userForm("password"))
+                <input type="submit" value="Log in" class="btn">
+            }
+        </div>
+    </div>
+}
