@@ -1,28 +1,12 @@
-package controllers
+package com.github.serejja.mplayer.controllers
 
+import controllers._
 import play.api._
 import play.api.mvc._
-import scala.io.Source
-import java.io.File
-import play.api.data.Form
 import com.github.serejja.mplayer.models.User
 
-object Application extends Controller {
-
-  def index = Action { implicit request =>
-    val logged = request.session.get("logged").getOrElse("n")
-    if (logged != "y") {
-      Redirect(routes.Application.loginPage)
-    } else {
-      Ok(views.html.index("Your new application is ready."))
-    }
-  }
-
-  def get = Action {
-    Ok.sendFile(content = new File("c:/darkness.mp3"))
-  }
-
-  def loginPage() = Action {
+object AuthenticationController extends Controller {
+	def loginPage() = Action {
     Ok(views.html.login(User.requestForm))
   }
 

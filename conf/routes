@@ -3,8 +3,8 @@
 # ~~~~
 
 #authorization
-GET 	/login						controllers.Application.loginPage
-POST	/login 						controllers.Application.login
+GET 	/login						controllers.AuthenticationController.loginPage
+POST	/login 						controllers.AuthenticationController.login
 
 # Home page
 GET     /                           controllers.Application.index
