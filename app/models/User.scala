@@ -1,4 +1,4 @@
-package com.github.serejja.mplayer.models
+package models
 
 import play.api.data._
 import play.api.data.Forms._

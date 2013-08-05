@@ -1,9 +1,9 @@
-package com.github.serejja.mplayer.controllers
+package controllers
 
 import controllers._
 import play.api._
 import play.api.mvc._
-import com.github.serejja.mplayer.models.User
+import models.User
 
 object AuthenticationController extends Controller {
 	def loginPage() = Action {
@@ -14,13 +14,13 @@ object AuthenticationController extends Controller {
     val user = User.requestForm.bindFromRequest
     user.fold(
       formWithErrors => {
-        Redirect(routes.Application.loginPage)
+        Redirect(routes.AuthenticationController.loginPage)
       },
       value => {
         if (User.authenticate(value)) {
           Ok(views.html.index("hello")).withSession("logged" -> "y")
         } else {
-          Redirect(routes.Application.loginPage)
+          Redirect(routes.AuthenticationController.loginPage)
         }
       })
   }

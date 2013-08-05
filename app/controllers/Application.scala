@@ -1,13 +1,11 @@
-package com.github.serejja.mplayer.controllers
+package controllers
 
 import play.api._
 import play.api.mvc._
 import scala.io.Source
 import java.io.File
 import play.api.data.Form
-import com.github.serejja.mplayer.models.User
-
-import controllers.routes;
+import models.User
 
 object Application extends Controller {
   def index = withAuth { request =>
@@ -21,7 +19,7 @@ object Application extends Controller {
   def withAuth(authenticated: Request[AnyContent] => Result) = Action { implicit request =>
     val logged = request.session.get("logged").getOrElse("n")
     if (logged != "y") {
-      Redirect(routes.Application.loginPage)
+      Redirect(routes.AuthenticationController.loginPage)
     } else {
       authenticated(request)
     }
