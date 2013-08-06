@@ -8,6 +8,7 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-responsive.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/slider.css")">
 
 		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 
@@ -15,10 +16,154 @@
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/jquery.jplayer.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/underscore-min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap-slider.js")" type="text/javascript"></script>
+        <style>
+            #volume .slider-handle {
+                background: #5AB35A;
+            }
+        </style>
     </head>
     <body>
         <div style="padding-left:5px;padding-top:5px;padding-bottom:5px;padding-right:5px;height:100%;">
             @content
+
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $("#jplayer").jPlayer({
+                        ready: function () {
+                            $(this).jPlayer("setMedia", {
+                                mp3: "/get?id=1"
+                            });
+                        },
+                        swfPath: "/js",
+                        supplied: "mp3"
+                    });
+
+                    $('#volume').slider({
+                        formater: function(value) {
+                            $("#jplayer").jPlayer("volume", value/100);
+                            return 'Volume: ' + value;
+                        }
+                    });
+
+                    $("#tabs").tab();
+                    fillGenres();
+                });
+
+                function updatePlayer(id){
+                    var player = $("#jplayer");
+
+                    player.jPlayer({
+                    ready: function () { 
+                      $(this).jPlayer("setMedia", { 
+                        mp3: id
+                      }); 
+                      $(this).jPlayer("play", 0);
+                    },
+                    swfPath: "/js",
+                    supplied: "mp3",
+                  }); 
+                  player.jPlayer("setMedia", { 
+                        mp3: id
+                      }); 
+                  player.jPlayer("play");
+                }
+
+                function fillGenres() {
+                    $.getJSON("/genres", function(json) {
+                        var table = $("#genrestable");
+                        table.empty();
+                        $.each(json, function() {
+                            var tbl_row = $("<tr>", {class: "loadartists", href: "#artists", id: this.id});
+                            var tbl_cell = $("<td>", {id: this.id, html: this.name});
+                            tbl_row.append(tbl_cell);
+                            tbl_row.click(function(event) {
+                                fillArtists(this.id);
+                            });
+                            table.append(tbl_row);
+                        })
+                        return false;
+                    });
+                }
+
+                function fillArtists(genreid) {
+                    console.log("/artists?genreid=" + genreid);
+                    $.getJSON("/artists?genreid=" + genreid, function(json) {
+                        var table = $("#artiststable");
+                        table.empty();
+                        $.each(json, function() {
+                            var tbl_row = $("<tr>", {href: "#", class: "loadalbums", id: this.id});
+                            var tbl_cell = $("<td>", {id: this.id, html: this.name});
+                            tbl_row.append(tbl_cell);
+                            tbl_row.click(function(event) {
+                                fillAlbums(this.id);
+                            });
+                            table.append(tbl_row);
+                        })
+                        $('#tabs a[href="#artists"]').tab('show');
+                        return false;
+                    });
+                }
+
+                function fillAlbums(artistid) {
+                    console.log("/albums?artistid=" + artistid);
+                    $.getJSON("/albums?artistid=" + artistid, function(json) {
+                        var table = $("#albumstable");
+                        table.empty();
+                        var tbl_header_row = $("<tr>", {});
+                        var tbl_header_cell_year = $("<th>", {html: "Year"});
+                        var tbl_header_cell_name = $("<th>", {html: "Name"});
+                        var tbl_header_cell_format = $("<th>", {html: "Format"});
+                        tbl_header_row.append(tbl_header_cell_year);
+                        tbl_header_row.append(tbl_header_cell_name);
+                        tbl_header_row.append(tbl_header_cell_format);
+                        table.append(tbl_header_row);
+                        $.each(json, function() {
+                            var tbl_row = $("<tr>", {href: "#", class: "loadtracks", id: this.id});
+                            var tbl_cell_year = $("<td>", {id: this.id, html: this.year});
+                            var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
+                            var tbl_cell_format = $("<td>", {id: this.id, html: this.format});
+                            tbl_row.append(tbl_cell_year);
+                            tbl_row.append(tbl_cell_name);
+                            tbl_row.append(tbl_cell_format);
+                            tbl_row.click(function(event) {
+                                fillTracks(this.id);
+                            });
+                            table.append(tbl_row);
+                        })
+                        $('#tabs a[href="#albums"]').tab('show');
+                        return false;
+                    });
+                }
+
+                function fillTracks(albumid) {
+                    console.log("/tracks?albumid=" + albumid);
+                    $.getJSON("/tracks?albumid=" + albumid, function(json) {
+                        var table = $("#trackstable");
+                        table.empty();
+                        var tbl_header_row = $("<tr>", {});
+                        var tbl_header_cell_name = $("<th>", {html: "Title"});
+                        var tbl_header_cell_duration = $("<th>", {html: "Duration"});
+                        tbl_header_row.append(tbl_header_cell_name);
+                        tbl_header_row.append(tbl_header_cell_duration);
+                        table.append(tbl_header_row);
+                        $.each(json, function() {
+                            var tbl_row = $("<tr>", {class: "play", href: "#"});
+                            var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
+                            var tbl_cell_duration = $("<td>", {id: this.id, html: this.duration});
+                            tbl_row.append(tbl_cell_name);
+                            tbl_row.append(tbl_cell_duration);
+                            tbl_row.click(function(event) {
+                                id = event.target.id
+                                console.log("get?id=" + id)
+                                updatePlayer("get?id=" + id)
+                            });
+                            table.append(tbl_row);
+                        })
+                        return false;
+                    });
+                }
+            </script>
         </div>
     </body>
 </html>

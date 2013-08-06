@@ -12,6 +12,9 @@
 	<div id="jp_container_1">
 		<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
 		<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
+		<div class="pull-right" style="padding-right:20px;">
+			<input type="text" class="span2" id="volume" data-slider-min="0" data-slider-max="100" data-slider-value="50" data-slider-tooltip="hide" data-slider-id="volume">
+		</div>
 	</div>
 	<br>
 
@@ -29,89 +32,14 @@
 	            <table class="table table-hover table-condensed" id="artiststable"></table>
 	        </div>
 	        <div class="tab-pane" id="albums">
-	            <h1>Nothing to show</h1>
+	            <table class="table table-hover table-condensed" id="albumstable"></table>
 	        </div>
 	    </div>
 	</div>
 	<br>
 
-	<table class="table table-hover table-condensed">
+	<table id="trackstable" class="table table-hover table-condensed">
 		<tr class="play" href="#"><td id="1">1</td></tr>
 		<tr class="play" href="#"><td id="2">2</td></tr>
 	</table>
-
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#jplayer").jPlayer({
-				ready: function () {
-					$(this).jPlayer("setMedia", {
-						mp3: "/get?id=1"
-					});
-				},
-				swfPath: "/js",
-				supplied: "mp3"
-			});
-
-			$(".play").click(function(event) { 
-				id = event.target.id
-				console.log("get?id=" + id)
-				updatePlayer("get?id=" + id)
-			});
-
-			$("#tabs").tab();
-			fillGenres();
-		});
-
-		function updatePlayer(id){
-	        var player = $("#jplayer");
-
-	        player.jPlayer({
-	        ready: function () { 
-	          $(this).jPlayer("setMedia", { 
-	            mp3: id
-	          }); 
-	          $(this).jPlayer("play", 0);
-	        },
-	        swfPath: "/js",
-	        supplied: "mp3",
-	      }); 
-	      player.jPlayer("setMedia", { 
-	            mp3: id
-	          }); 
-	      player.jPlayer("play");
-	    }
-
-	    function fillGenres() {
-	    	$.getJSON("/genres", function(json) {
-	    		var table = $("#genrestable");
-	    		table.empty();
-	    		$.each(json, function() {
-	    			var tbl_row = $("<tr>", {class: "loadartists", href: "#artists", id: this.id});
-	    			var tbl_cell = $("<td>", {id: this.id, html: this.name});
-	    			tbl_row.append(tbl_cell);
-	    			tbl_row.click(function(event) {
-	    				fillArtists(this.id);
-	    			});
-	    			table.append(tbl_row);
-	    		})
-	    		return false;
-	    	});
-	    }
-
-	    function fillArtists(genreid) {
-	    	console.log("/artists?genreid=" + genreid);
-			$.getJSON("/artists?genreid=" + genreid, function(json) {
-	    		var table = $("#artiststable");
-	    		table.empty();
-	    		$.each(json, function() {
-	    			var tbl_row = $("<tr>", {href: "#", class: "loadalbums", id: this.id});
-	    			var tbl_cell = $("<td>", {id: this.id, html: this.name});
-	    			tbl_row.append(tbl_cell);
-	    			table.append(tbl_row);
-	    		})
-	    		$('#tabs a[href="#artists"]').tab('show');
-	    		return false;
-	    	});
-	    }
-	</script>
 }

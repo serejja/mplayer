@@ -23,13 +23,20 @@ object Application extends Controller {
     import models.Artists._
     Ok(Json.toJson(Artists.byGenre(genreid)))
   }
+  
+  def albums(artistid: Long) = withAuth { implicit request =>
+    import models.Albums._
+    Ok(Json.toJson(Albums.byArtist(artistid)))
+  }
+  
+  def tracks(albumid: Long) = withAuth { implicit request =>
+    import models.Tracks._
+    Ok(Json.toJson(Tracks.byAlbum(albumid)))
+  }
 
   def get(id: Long) = withAuth { implicit request =>
-    if (id == 1) {
-      Ok.sendFile(content = new File("c:/darkness.mp3"))
-    } else {
-      Ok.sendFile(content = new File("c:/monody.mp3"))
-    }
+    val track = Tracks.byId(id)
+    Ok.sendFile(content = new File(track.location))
   }
 
   def withAuth(authenticated: Request[AnyContent] => Result) = Action { implicit request =>
