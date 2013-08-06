@@ -22,16 +22,13 @@
     </ul>
     <div id="my-tab-content" class="tab-content">
         <div class="tab-pane active" id="genres">
-            <h1>Genres</h1>
-            <p>genres</p>
+            <table class="table table-hover table-condensed" id="genrestable"></table>
         </div>
         <div class="tab-pane" id="artists">
-            <h1>Artists</h1>
-            <p>artists</p>
+            <h1>Nothing to show</h1>
         </div>
         <div class="tab-pane" id="albums">
-            <h1>Albums</h1>
-            <p>albums</p>
+            <h1>Nothing to show</h1>
         </div>
     </div>
 	<br>
@@ -60,6 +57,7 @@
 			});
 
 			$("#tabs").tab();
+			request("/genres");
 		});
 
 		function updatePlayer(id){
@@ -80,5 +78,35 @@
 	          }); 
 	      player.jPlayer("play");
 	    }
+
+	    function request(url){
+	    	$.getJSON(url, function(json) {
+	    		var table = $("#genrestable");
+	    		$.each(json, function() {
+	    			var tbl_row = $("<tr>", {id: this.id});
+	    			var tbl_cell = $("<td>", {html: this.name});
+	    			tbl_row.append(tbl_cell);
+	    			table.append(tbl_row);
+	    		})
+	    		return false;
+	    	});
+	    }
+
+	    function request_json(url){
+            $.ajax({
+                type : 'GET',
+                url : url,
+                dataType : "json",
+                success : function(data) {
+                	console.log("here")
+                	console.log($.parseJSON(data).body)
+                    return $.parseJSON(data).body;
+                },
+                error : function(data) {
+                    console.log("Error getting json from " + url)
+                }
+            });
+            return "{}";
+        }
 	</script>
 }

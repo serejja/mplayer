@@ -6,10 +6,17 @@ import scala.io.Source
 import java.io.File
 import play.api.data.Form
 import models.User
+import play.api.libs.json.Json
+import models.Genres
+import models.Genres._
 
 object Application extends Controller {
   def index = withAuth { implicit request =>
     Ok(views.html.index(request))
+  }
+  
+  def genres = withAuth { implicit request =>
+    Ok(Json.toJson(Genres.all)).as("application/json")
   }
 
   def get(id: Long) = withAuth { implicit request =>
