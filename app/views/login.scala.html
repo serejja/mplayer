@@ -4,9 +4,8 @@
 @import helper.twitterBootstrap._
 
 @main("Login") {
-    <div class="row" style="margin-top: 25%"></div>
     <div class="row">
-        <div class="span6 offset5">
+        <div class="span12">
             @form(routes.AuthenticationController.login, args = 'id -> "userform", '_class -> "form-horizontal") {
                 @inputText(userForm("name"))
                 @inputPassword(userForm("password"))

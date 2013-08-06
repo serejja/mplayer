@@ -1,26 +1,84 @@
-@(message: String)
+@(request: play.api.mvc.Request[Any])
 
 @import helper._
 @import helper.twitterBootstrap._
 
 @main("mplayer") {
+	<div class="pull-right" style="padding-right:5px;">
+		<small>Logged in as @request.session.get("username")</small>
+		<small><a href="/logout">Logout</a></small>
+	</div>
 	<div id="jplayer"></div>
 	<div id="jp_container_1">
-		<a href="#" class="btn btn-danger btn-mini jp-play">Play</a>
-		<a href="#" class="btn btn-danger btn-mini jp-pause">Pause</a>
+		<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
+		<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
 	</div>
+	<br>
+
+	<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
+        <li><a href="#artists" data-toggle="tab">Artists</a></li>
+        <li><a href="#albums" data-toggle="tab">Albums</a></li>
+    </ul>
+    <div id="my-tab-content" class="tab-content">
+        <div class="tab-pane active" id="genres">
+            <h1>Genres</h1>
+            <p>genres</p>
+        </div>
+        <div class="tab-pane" id="artists">
+            <h1>Artists</h1>
+            <p>artists</p>
+        </div>
+        <div class="tab-pane" id="albums">
+            <h1>Albums</h1>
+            <p>albums</p>
+        </div>
+    </div>
+	<br>
+
+	<table class="table table-hover table-condensed">
+		<tr class="play" href="#"><td id="1">1</td></tr>
+		<tr class="play" href="#"><td id="2">2</td></tr>
+	</table>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#jplayer").jPlayer({
 				ready: function () {
 					$(this).jPlayer("setMedia", {
-						m4a: "/get"
+						mp3: "/get?id=1"
 					});
 				},
 				swfPath: "/js",
-				supplied: "m4a"
+				supplied: "mp3"
 			});
+
+			$(".play").click(function(event) { 
+				id = event.target.id
+				console.log("get?id=" + id)
+				updatePlayer("get?id=" + id)
+			});
+
+			$("#tabs").tab();
 		});
+
+		function updatePlayer(id){
+	        var player = $("#jplayer");
+
+	        player.jPlayer({
+	        ready: function () { 
+	          $(this).jPlayer("setMedia", { 
+	            mp3: id
+	          }); 
+	          $(this).jPlayer("play", 0);
+	        },
+	        swfPath: "/js",
+	        supplied: "mp3",
+	      }); 
+	      player.jPlayer("setMedia", { 
+	            mp3: id
+	          }); 
+	      player.jPlayer("play");
+	    }
 	</script>
 }

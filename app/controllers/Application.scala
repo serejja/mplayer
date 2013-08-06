@@ -8,14 +8,18 @@ import play.api.data.Form
 import models.User
 
 object Application extends Controller {
-  def index = withAuth { request =>
-    Ok(views.html.index("Your new application is ready."))
+  def index = withAuth { implicit request =>
+    Ok(views.html.index(request))
   }
 
-  def get = withAuth { request =>
-    Ok.sendFile(content = new File("c:/darkness.mp3"))
+  def get(id: Long) = withAuth { implicit request =>
+    if (id == 1) {
+      Ok.sendFile(content = new File("c:/darkness.mp3"))
+    } else {
+      Ok.sendFile(content = new File("c:/monody.mp3"))
+    }
   }
-  
+
   def withAuth(authenticated: Request[AnyContent] => Result) = Action { implicit request =>
     val logged = request.session.get("logged").getOrElse("n")
     if (logged != "y") {

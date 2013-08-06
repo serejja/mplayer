@@ -6,7 +6,7 @@ import play.api.mvc._
 import models.User
 
 object AuthenticationController extends Controller {
-	def loginPage() = Action {
+  def loginPage() = Action { implicit request =>
     Ok(views.html.login(User.requestForm))
   }
 
@@ -18,10 +18,14 @@ object AuthenticationController extends Controller {
       },
       value => {
         if (User.authenticate(value)) {
-          Ok(views.html.index("hello")).withSession("logged" -> "y")
+          Redirect(routes.Application.index).withSession("logged" -> "y", "username" -> value.name)
         } else {
           Redirect(routes.AuthenticationController.loginPage)
         }
       })
+  }
+
+  def logout = Action { implicit request =>
+    Ok(views.html.login(User.requestForm)).withSession("logged" -> "n")
   }
 }
