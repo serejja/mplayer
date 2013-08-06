@@ -7,8 +7,7 @@ import java.io.File
 import play.api.data.Form
 import models.User
 import play.api.libs.json.Json
-import models.Genres
-import models.Genres._
+import models._
 
 object Application extends Controller {
   def index = withAuth { implicit request =>
@@ -16,7 +15,13 @@ object Application extends Controller {
   }
   
   def genres = withAuth { implicit request =>
-    Ok(Json.toJson(Genres.all)).as("application/json")
+    import models.Genres._
+    Ok(Json.toJson(Genres.all))
+  }
+  
+  def artists(genreid: Long) = withAuth { implicit request =>
+    import models.Artists._
+    Ok(Json.toJson(Artists.byGenre(genreid)))
   }
 
   def get(id: Long) = withAuth { implicit request =>

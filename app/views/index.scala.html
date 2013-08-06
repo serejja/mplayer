@@ -15,22 +15,24 @@
 	</div>
 	<br>
 
-	<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
-        <li><a href="#artists" data-toggle="tab">Artists</a></li>
-        <li><a href="#albums" data-toggle="tab">Albums</a></li>
-    </ul>
-    <div id="my-tab-content" class="tab-content">
-        <div class="tab-pane active" id="genres">
-            <table class="table table-hover table-condensed" id="genrestable"></table>
-        </div>
-        <div class="tab-pane" id="artists">
-            <h1>Nothing to show</h1>
-        </div>
-        <div class="tab-pane" id="albums">
-            <h1>Nothing to show</h1>
-        </div>
-    </div>
+	<div id="tabsholder">
+		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+	        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
+	        <li><a href="#artists" data-toggle="tab">Artists</a></li>
+	        <li><a href="#albums" data-toggle="tab">Albums</a></li>
+	    </ul>
+	    <div id="my-tab-content" class="tab-content">
+	        <div class="tab-pane active" id="genres">
+	            <table class="table table-hover table-condensed" id="genrestable"></table>
+	        </div>
+	        <div class="tab-pane" id="artists">
+	            <table class="table table-hover table-condensed" id="artiststable"></table>
+	        </div>
+	        <div class="tab-pane" id="albums">
+	            <h1>Nothing to show</h1>
+	        </div>
+	    </div>
+	</div>
 	<br>
 
 	<table class="table table-hover table-condensed">
@@ -57,7 +59,7 @@
 			});
 
 			$("#tabs").tab();
-			request("/genres");
+			fillGenres();
 		});
 
 		function updatePlayer(id){
@@ -79,34 +81,37 @@
 	      player.jPlayer("play");
 	    }
 
-	    function request(url){
-	    	$.getJSON(url, function(json) {
+	    function fillGenres() {
+	    	$.getJSON("/genres", function(json) {
 	    		var table = $("#genrestable");
+	    		table.empty();
 	    		$.each(json, function() {
-	    			var tbl_row = $("<tr>", {id: this.id});
-	    			var tbl_cell = $("<td>", {html: this.name});
+	    			var tbl_row = $("<tr>", {class: "loadartists", href: "#artists", id: this.id});
+	    			var tbl_cell = $("<td>", {id: this.id, html: this.name});
 	    			tbl_row.append(tbl_cell);
+	    			tbl_row.click(function(event) {
+	    				fillArtists(this.id);
+	    			});
 	    			table.append(tbl_row);
 	    		})
 	    		return false;
 	    	});
 	    }
 
-	    function request_json(url){
-            $.ajax({
-                type : 'GET',
-                url : url,
-                dataType : "json",
-                success : function(data) {
-                	console.log("here")
-                	console.log($.parseJSON(data).body)
-                    return $.parseJSON(data).body;
-                },
-                error : function(data) {
-                    console.log("Error getting json from " + url)
-                }
-            });
-            return "{}";
-        }
+	    function fillArtists(genreid) {
+	    	console.log("/artists?genreid=" + genreid);
+			$.getJSON("/artists?genreid=" + genreid, function(json) {
+	    		var table = $("#artiststable");
+	    		table.empty();
+	    		$.each(json, function() {
+	    			var tbl_row = $("<tr>", {href: "#", class: "loadalbums", id: this.id});
+	    			var tbl_cell = $("<td>", {id: this.id, html: this.name});
+	    			tbl_row.append(tbl_cell);
+	    			table.append(tbl_row);
+	    		})
+	    		$('#tabs a[href="#artists"]').tab('show');
+	    		return false;
+	    	});
+	    }
 	</script>
 }
