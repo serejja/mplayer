@@ -7,6 +7,10 @@ GET 	/login						controllers.AuthenticationController.loginPage
 POST	/login 						controllers.AuthenticationController.login
 GET 	/logout						controllers.AuthenticationController.logout
 
+#upload
+GET 	/upload						controllers.UploadController.uploadPage
+POST	/upload 					controllers.UploadController.upload
+
 # Home page
 GET     /                           controllers.Application.index
 GET		/get 						controllers.Application.get(id: Long)

@@ -21,10 +21,18 @@
             #volume .slider-handle {
                 background: #5AB35A;
             }
+
+            #divbody {
+                min-height:98.3%;
+            }
+
+            html,body {
+                height:98.3%;
+            }
         </style>
     </head>
     <body>
-        <div style="padding-left:5px;padding-top:5px;padding-bottom:5px;padding-right:5px;height:100%;">
+        <div id="divbody" style="padding-left:5px;padding-top:5px;padding-bottom:5px;padding-right:5px;height:100%;">
             @content
 
             <script type="text/javascript">
@@ -165,5 +173,8 @@
                 }
             </script>
         </div>
+        <footer class="footer" style="background-color:#f0f0f0">
+            <small><a href="/upload">Upload a release</a></small>
+        </footer>
     </body>
 </html>

@@ -1,0 +1,9 @@
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Upload a release") {
+	@helper.form(action = routes.UploadController.upload, 'enctype -> "multipart/form-data") {
+	    <input type="file" name="release">
+	    <p><input type="submit"></p>
+	}
+} 

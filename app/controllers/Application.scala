@@ -9,7 +9,7 @@ import models.User
 import play.api.libs.json.Json
 import models._
 
-object Application extends Controller {
+object Application extends AbstractController {
   def index = withAuth { implicit request =>
     Ok(views.html.index(request))
   }
@@ -37,14 +37,5 @@ object Application extends Controller {
   def get(id: Long) = withAuth { implicit request =>
     val track = Tracks.byId(id)
     Ok.sendFile(content = new File(track.location))
-  }
-
-  def withAuth(authenticated: Request[AnyContent] => Result) = Action { implicit request =>
-    val logged = request.session.get("logged").getOrElse("n")
-    if (logged != "y") {
-      Redirect(routes.AuthenticationController.loginPage)
-    } else {
-      authenticated(request)
-    }
   }
 }
