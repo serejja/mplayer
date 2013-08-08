@@ -33,6 +33,11 @@ object Application extends AbstractController {
     import models.Tracks._
     Ok(Json.toJson(Tracks.byAlbum(albumid)))
   }
+  
+  def trackinfo(id: Long) = withAuth { implicit request =>
+    import models.Tracks._
+    Ok(Json.toJson(Tracks.trackInfo(id)))
+  }
 
   def get(id: Long) = withAuth { implicit request =>
     val track = Tracks.byId(id)

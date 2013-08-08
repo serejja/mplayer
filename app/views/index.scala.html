@@ -10,13 +10,18 @@
 	</div>
 	<div id="jplayer"></div>
 	<div id="jp_container_1">
-		<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
-		<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
+		<div class="pull-left" style="padding-right:5px;">
+			<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
+			<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
+		</div>
+		<div class="pull-left" style="padding-right:5px;">
+			<p id="nowplaying"></p>
+		</div>
 		<div class="pull-right" style="padding-right:20px;">
 			<input type="text" class="span2" id="volume" data-slider-min="0" data-slider-max="100" data-slider-value="50" data-slider-tooltip="hide" data-slider-id="volume">
 		</div>
 	</div>
-	<br>
+	<br><br>
 
 	<div id="tabsholder" style="height:35%;">
 		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
@@ -62,6 +67,10 @@
 	                return 'Volume: ' + value;
 	            }
 	        });
+
+	        $("#jplayer").bind($.jPlayer.event.ended, function(event) {
+	        	console.log("song ended");
+	    	});
 
 	        $("#tabs").tab();
 	        fillGenres();

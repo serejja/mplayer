@@ -30,10 +30,6 @@
             html,body {
                 height:98.3%;
             }
-
-            table-striped tbody tr.highlight td { 
-                background-color: red; 
-            }
         </style>
     </head>
     <body>
@@ -47,7 +43,7 @@
                     player.jPlayer({
                     ready: function () { 
                       $(this).jPlayer("setMedia", { 
-                        mp3: id
+                        mp3: "get?id=" + id
                       }); 
                       $(this).jPlayer("play");
                     },
@@ -55,9 +51,19 @@
                     supplied: "mp3",
                   }); 
                   player.jPlayer("setMedia", { 
-                        mp3: id
+                        mp3: "get?id=" + id
                       }); 
                   player.jPlayer("play");
+
+                  updateTrackInfo(id);
+                }
+
+                function updateTrackInfo(id) {
+                    $.getJSON("/trackinfo?id=" + id, function(json) {
+                        var nowplaying = $("#nowplaying");
+                        nowplaying.text(json.artist + " - " + json.title + " (" + json.duration + ")");
+                        return false;
+                    });
                 }
 
                 function fillGenres() {
@@ -140,7 +146,7 @@
                             tbl_row.click(function(event) {
                                 id = event.target.id
                                 console.log("get?id=" + id)
-                                updatePlayer("get?id=" + id)
+                                updatePlayer(id)
                             });
                             table.append(tbl_row);
                         });

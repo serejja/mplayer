@@ -11,6 +11,8 @@ import service.Log
 
 case class Track(id: Long, name: String, duration: String, location: String, albumid: Long)
 
+case class TrackInfo(artist: String, title: String, duration: String)
+
 object Tracks {
   val parser = (
     get[Long]("id") ~
@@ -21,7 +23,15 @@ object Tracks {
       case id ~ name ~ duration ~ location ~ albumid => Track(id, name, duration, location, albumid)
     })
 
+  val trackInfoParser = (
+    get[String]("artist") ~
+    get[String]("title") ~
+    get[String]("duration") map {
+      case artist ~ title ~ duration => TrackInfo(artist, title, duration)
+    })
+
   implicit val writer = Json.writes[Track]
+  implicit val trackInfoWriter = Json.writes[TrackInfo]
 
   def byAlbum(albumid: Long): List[Track] = {
     DB.withConnection { implicit connection =>
@@ -77,6 +87,16 @@ object Tracks {
 
   def parseDuration(seconds: Long): String = {
     f"${seconds / 60}%d:${seconds % 60}%02d"
+  }
+
+  def trackInfo(trackid: Long): TrackInfo = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT ar.name as artist, t.name as title, t.duration as duration " +
+        " FROM tracks t " +
+        " INNER JOIN albums al on t.album_id = al.id " +
+        " INNER JOIN artists ar on al.artist_id = ar.id " +
+        " WHERE t.id = {id}").on('id -> trackid).single(Tracks.trackInfoParser)
+    }
   }
 
   private def formatExtensionSupported(extension: String): Boolean = {
