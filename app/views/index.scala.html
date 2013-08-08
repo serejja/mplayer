@@ -42,7 +42,7 @@
 	    </div>
 	</div>
 	<hr>
-	<div id="tracksholder" style="height:58%;">
+	<div id="tracksholder" style="overflow:auto;height:58%;">
 		<b>Playlist</b>
 		<table id="trackstable" class="table table-hover table-condensed table-striped">
 			<th>Nothing to show</th>
@@ -50,6 +50,10 @@
 	</div>
 
 	<script type="text/javascript">
+		var DELAY = 200,
+	    clicks = 0,
+	    timer = null;
+
 	    $(document).ready(function(){
 	        $("#jplayer").jPlayer({
 	            ready: function () {
@@ -70,6 +74,14 @@
 
 	        $("#tabs").tab();
 	        fillGenres();
+
+	        $(function() {
+				$.extend($.fn.disableTextSelect = function() {
+					return this.each(function() {
+						$(this).mousedown(function() { return false; });
+					});
+				});
+			});
 	    });
     </script>
 }

@@ -27,7 +27,7 @@ GET		/get 						controllers.Application.get(id: Long)
 GET 	/genres						controllers.Application.genres
 GET 	/artists					controllers.Application.artists(genreid: Long)
 GET 	/albums						controllers.Application.albums(artistid: Long)
-GET 	/tracks						controllers.Application.tracks(albumid: Long)
+GET 	/tracks						controllers.Application.tracks(albumid: Long ?= -1, artistid: Long ?= -1, genreid: Long ?= -1)
 GET 	/trackinfo					controllers.Application.trackinfo(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path

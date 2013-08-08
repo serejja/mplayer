@@ -29,9 +29,15 @@ object Application extends AbstractController {
     Ok(Json.toJson(Albums.byArtist(artistid)))
   }
   
-  def tracks(albumid: Long) = withAuth { implicit request =>
+  def tracks(albumid: Long, artistid: Long, genreid: Long) = withAuth { implicit request =>
     import models.Tracks._
-    Ok(Json.toJson(Tracks.byAlbum(albumid)))
+    if (albumid != -1) {
+    	Ok(Json.toJson(Tracks.byAlbum(albumid)))
+    } else if (artistid != -1) {
+      Ok(Json.toJson(Tracks.byArtist(artistid)))
+    } else {
+      Ok(Json.toJson(Tracks.byGenre(genreid)))
+    }
   }
   
   def trackinfo(id: Long) = withAuth { implicit request =>

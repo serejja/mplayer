@@ -41,6 +41,29 @@ object Tracks {
         " ORDER BY id").on('albumid -> albumid).as(Tracks.parser *)
     }
   }
+  
+  def byArtist(artistid: Long): List[Track] = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT t.id, t.name, t.duration, t.location, t.album_id " +
+        " FROM tracks t" +
+        " INNER JOIN albums al ON t.album_id = al.id " +
+        " INNER JOIN artists ar ON al.artist_id = ar.id" +
+        " WHERE ar.id = {artistid} " +
+        " ORDER BY t.id").on('artistid -> artistid).as(Tracks.parser *)
+    }
+  }
+  
+  def byGenre(genreid: Long): List[Track] = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT t.id, t.name, t.duration, t.location, t.album_id " +
+        " FROM tracks t" +
+        " INNER JOIN albums al ON t.album_id = al.id " +
+        " INNER JOIN artists ar ON al.artist_id = ar.id " +
+        " INNER JOIN genres g ON ar.genre_id = g.id " +
+        " WHERE g.id = {genreid} " +
+        " ORDER BY t.id").on('genreid -> genreid).as(Tracks.parser *)
+    }
+  }
 
   def byId(id: Long): Track = {
     val tracks = DB.withConnection { implicit connection =>
