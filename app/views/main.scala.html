@@ -42,18 +42,22 @@
 
                     player.jPlayer({
                     ready: function () { 
-                      $(this).jPlayer("setMedia", { 
-                        mp3: "get?id=" + id
-                      }); 
-                      $(this).jPlayer("play");
+                        $(this).jPlayer("setMedia", { 
+                            mp3: "get?id=" + id
+                        }); 
+                        $(this).jPlayer("play");
                     },
                     swfPath: "/js",
                     supplied: "mp3",
-                  }); 
-                  player.jPlayer("setMedia", { 
+                    }); 
+                    player.jPlayer("setMedia", { 
                         mp3: "get?id=" + id
-                      }); 
-                  player.jPlayer("play");
+                    }); 
+                    player.jPlayer("play");
+                    player.bind($.jPlayer.event.ended, function(event) {
+                        console.log("song ended");
+                        playNext();
+                    });
 
                   updateTrackInfo(id);
                 }
@@ -64,6 +68,14 @@
                         nowplaying.text(json.artist + " - " + json.title + " (" + json.duration + ")");
                         return false;
                     });
+                }
+
+                function playNext() {
+                    var nextrow = $("#trackstable > tbody > tr.success").next("tr");
+                    if (nextrow.attr("id") == undefined) {
+                        nextrow = $("#trackstable > tbody > tr").first().next();
+                    }
+                    nextrow.click();
                 }
 
                 function fillGenres() {
@@ -135,12 +147,15 @@
                     $.getJSON("/tracks?albumid=" + albumid, function(json) {
                         var table = $("#trackstable");
                         table.empty();
-                        headers(table, ["Title", "Duration"]);
+                        headers(table, ["#", "Title", "Duration"]);
                         highlightOnClick(table);
+                        var count = 1;
                         $.each(json, function() {
-                            var tbl_row = $("<tr>", {class: "play", href: "#"});
+                            var tbl_row = $("<tr>", {class: "play", href: "#", id: this.id});
+                            var tbl_cell_no = $("<td>", {id: this.id, html: count++});
                             var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
                             var tbl_cell_duration = $("<td>", {id: this.id, html: this.duration});
+                            tbl_row.append(tbl_cell_no);
                             tbl_row.append(tbl_cell_name);
                             tbl_row.append(tbl_cell_duration);
                             tbl_row.click(function(event) {
