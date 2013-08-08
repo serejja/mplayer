@@ -13,8 +13,13 @@ POST	/upload 					controllers.UploadController.upload
 
 #manage
 GET 	/edit/genres				controllers.ManageController.genresPage
-GET 	/edit/genres/delete			controllers.ManageController.deleteGenre(id: Long)
 GET 	/edit/artists				controllers.ManageController.artistsPage(genreid: Long)
+GET 	/edit/albums				controllers.ManageController.albumsPage(artistid: Long)
+GET 	/edit/tracks				controllers.ManageController.tracksPage(albumid: Long)
+GET 	/edit/genres/delete			controllers.ManageController.deleteGenre(id: Long)
+GET 	/edit/artists/delete		controllers.ManageController.deleteArtist(id: Long)
+GET 	/edit/albums/delete			controllers.ManageController.deleteAlbum(id: Long)
+GET 	/edit/tracks/delete			controllers.ManageController.deleteTrack(id: Long)
 
 # Home page
 GET     /                           controllers.Application.index

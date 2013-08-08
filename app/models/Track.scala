@@ -7,6 +7,7 @@ import play.api.Play.current
 import play.api.libs.json._
 import java.io.File
 import service.FileUtils._
+import service.Log
 
 case class Track(id: Long, name: String, duration: String, location: String, albumid: Long)
 
@@ -46,20 +47,21 @@ object Tracks {
         " FROM tracks " +
         " WHERE lower(name) = {name} AND album_id = {albumid}").on('name -> name.toLowerCase, 'albumid -> albumid).as(Tracks.parser *)
     }
+    Log.debug("" + tracks.length)
     if (tracks.length > 0) tracks.head else null
   }
 
   def add(name: String, duration: String, location: String, albumid: Long): Track = {
     if (!exists(name, albumid)) {
-	    return DB.withConnection { implicit connection =>
-	      SQL("INSERT INTO tracks (name, duration, location, album_id)" +
-	        " VALUES ({name}, {duration}, {location}, {albumid}) " +
-	        " RETURNING id, name, duration, location, album_id").on('name -> name, 'duration -> duration, 'location -> location, 'albumid -> albumid).single(Tracks.parser)
-	    }
+      return DB.withConnection { implicit connection =>
+        SQL("INSERT INTO tracks (name, duration, location, album_id)" +
+          " VALUES ({name}, {duration}, {location}, {albumid}) " +
+          " RETURNING id, name, duration, location, album_id").on('name -> name, 'duration -> duration, 'location -> location, 'albumid -> albumid).single(Tracks.parser)
+      }
     }
     null
   }
-  
+
   def delete(trackid: Long) {
     val track = byId(trackid)
     new File(track.location).delete
@@ -87,6 +89,6 @@ object Tracks {
   }
 
   private def exists(name: String, albumid: Long): Boolean = {
-    byNameAndAlbum(name, albumid) == null
+    byNameAndAlbum(name, albumid) != null
   }
 }

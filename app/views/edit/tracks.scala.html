@@ -1,9 +1,9 @@
-@(artists: List[models.Artist])
+@(tracks: List[models.Track])
 
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("Edit Artists") {
+@main("Edit Tracks") {
 	<table class="table table-condensed table-striped">
 		<thead>
 		    <tr>
@@ -13,11 +13,11 @@
 		    </tr>
 	    </thead>
 	    <tbody>
-	        @for(artist <- artists) {
+	        @for(track <- tracks) {
 	        	<tr>
-	            	<td><a href="@routes.ManageController.albumsPage(artist.id)">@artist.id</a></td>
-	            	<td>@artist.name</td>
-	            	<td><a href="@routes.ManageController.deleteArtist(artist.id)">x</a></td>
+	            	<td>@track.id</a></td>
+	            	<td>@track.name</td>
+	            	<td><a href="@routes.ManageController.deleteTrack(track.id)">x</a></td>
 	            </tr>
 	        }
 	    </tbody>
