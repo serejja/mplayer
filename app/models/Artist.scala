@@ -37,6 +37,17 @@ object Artists {
         " ORDER BY name").on('genreid -> genreid).as(Artists.parser *)
     }
   }
+  
+  def byTrackId(trackid: Long): Artist = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT ar.id, ar.name, ar.genre_id " +
+        " FROM artists ar " +
+        " INNER JOIN albums al on ar.id = al.artist_id " +
+        " INNER JOIN tracks t on al.id = t.album_id " +
+        " WHERE t.id = {id} " +
+        " LIMIT 1").on('id -> trackid).single(Artists.parser)
+    }
+  }
 
   def getOrNew(genreid: Long, name: String): Artist = {
     var artists = DB.withConnection { implicit connection =>

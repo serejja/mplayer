@@ -4,6 +4,9 @@
 @import helper.twitterBootstrap._
 
 @main("Edit Albums") {
+	@if(albums.size > 0) {
+		<a href="@routes.ManageController.artistsPage(models.Genres.byAlbumId(albums.head.id).id)">Back</a>
+	}
 	<table class="table table-condensed table-striped">
 		<thead>
 		    <tr>

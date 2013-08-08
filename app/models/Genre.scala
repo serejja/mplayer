@@ -35,6 +35,17 @@ object Genres {
     }
   }
   
+  def byAlbumId(albumid: Long): Genre = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT g.id, g.name " +
+        " FROM genres g" +
+        " INNER JOIN artists ar on g.id = ar.genre_id" +
+        " INNER JOIN albums al on ar.id = al.artist_id" +
+        " WHERE al.id = {id}" +
+        " LIMIT 1").on('id -> albumid).single(Genres.parser)
+    }
+  }
+  
   def delete(genreid: Long) {
     val genre = Genres.byId(genreid)
     Artists.byGenre(genreid).foreach(artist => Artists.delete(artist.id))
