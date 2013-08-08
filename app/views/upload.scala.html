@@ -4,9 +4,11 @@
 @main("Upload a release") {
 	@helper.form(action = routes.UploadController.upload, 'enctype -> "multipart/form-data") {
 	    <input type="file" name="release"><br>
+	    <input type="text" name="genre" placeholder="Genre"><br>
 	    <input type="text" name="artist" placeholder="Artist"><br>
 	    <input type="text" name="album" placeholder="Album"><br>
 	    <input type="text" name="year" placeholder="Year"><br>
+	    <input type="text" name="format" placeholder="Format"><br>
 	    <input type="submit" value="Upload">
 	}
 } 

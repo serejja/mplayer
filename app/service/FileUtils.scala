@@ -12,13 +12,18 @@ import com.github.junrar.impl.FileVolumeManager
 object FileUtils {
   val zipBytes = Array[Byte]('P', 'K', 0x3, 0x4)
   val rarBytes = Array[Byte]('R', 'a', 'r', '!')
+  val mp3Bytes = Array[Byte]('R', 'a', 'r', '!')
 
   def isZip(file: File): Boolean = {
-    compareBytes(file, zipBytes)
+    compareBytes(file, zipBytes) && file.getName.endsWith(".zip")
   }
 
   def isRar(file: File): Boolean = {
-    compareBytes(file, rarBytes)
+    compareBytes(file, rarBytes) && file.getName.endsWith(".rar")
+  }
+  
+  def isMp3(file: File): Boolean = {
+    file.getName.endsWith(".mp3")
   }
 
   private def compareBytes(file: File, bytes: Array[Byte]): Boolean = {
@@ -71,7 +76,8 @@ object FileUtils {
   }
 
   def unrar(file: File) {
-    val newPath = file.getParentFile.getAbsolutePath
+    val filePath = file.getAbsolutePath
+    val newPath = filePath.substring(0, filePath.length - 4)
     val archive = new Archive(new FileVolumeManager(file))
     try {
       var fileHeader = archive.nextFileHeader
@@ -88,5 +94,16 @@ object FileUtils {
     } finally {
       archive.close
     }
+  }
+  
+  def extension(file: File): String = {
+    if (file != null) {
+      val name = file.getName
+      val index = name.lastIndexOf('.')
+      if (index != -1) {
+        return name.substring(index + 1)
+      }
+    }
+    ""
   }
 }

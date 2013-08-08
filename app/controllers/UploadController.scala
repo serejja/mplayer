@@ -10,6 +10,7 @@ object UploadController extends AbstractController {
   private val PARAM_ARTIST = "artist"
   private val PARAM_ALBUM = "album"
   private val PARAM_YEAR = "year"
+  private val PARAM_FORMAT = "format"
 
   def uploadPage = withAuth { implicit request =>
     Ok(views.html.upload())
@@ -17,11 +18,14 @@ object UploadController extends AbstractController {
 
   def upload = Action(parse.multipartFormData) { implicit request =>
     request.body.file("release").map { release =>
-      val formParameters = requestParameters(request.body.asFormUrlEncoded)
-      if (isValid(formParameters)) {
-        val file = new File(Settings.repositoryLocation + release.filename)
+      val formParameters = request.body.asFormUrlEncoded
+      def getParam(name: String): String = {
+        formParameters.getOrElse(name, Seq("")).head
+      }
+      if (isValid(request.body.asFormUrlEncoded)) {
+        val file = new File(Settings.temporaryLocation + release.filename)
         release.ref.moveTo(file)
-        Release.fromFile(file, formParameters)
+        Release.fromFile(file, getParam(PARAM_GENRE), getParam(PARAM_ARTIST), getParam(PARAM_ALBUM), getParam(PARAM_YEAR), getParam(PARAM_FORMAT))
         Log.debug("Uploaded " + release.filename)
         Ok("File uploaded")
       } else {
@@ -29,8 +33,7 @@ object UploadController extends AbstractController {
         Ok("Not all parameters supplied")
       }
     }.getOrElse {
-      Redirect(routes.Application.index).flashing(
-        "error" -> "Missing file")
+      Ok("No file supplied")
     }
   }
 
@@ -43,7 +46,7 @@ object UploadController extends AbstractController {
     result
   }
 
-  private def isValid(params: HashMap[String, String]): Boolean = {
-    return params.getOrElse(PARAM_ARTIST, "noartist") != "noartist" && params.getOrElse(PARAM_ALBUM, "noalbum") != "noalbum" && params.getOrElse(PARAM_YEAR, "noyear") != "noyear"
+  private def isValid(params: Map[String, Seq[String]]): Boolean = {
+    params.getOrElse(PARAM_GENRE, Seq("")).head != "" && params.getOrElse(PARAM_ARTIST, Seq("")).head != "" && params.getOrElse(PARAM_ALBUM, Seq("")).head != "" && params.getOrElse(PARAM_YEAR, Seq("")).head != "" && params.getOrElse(PARAM_FORMAT, Seq("")).head != ""
   }
 }

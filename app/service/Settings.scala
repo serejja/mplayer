@@ -12,6 +12,7 @@ object Settings {
   private var isFilling = false
 
   private val REPO_LOCATION = "repo_location"
+  private val TEMP_LOCATION = "temp_location"
 
   private lazy val parser = {
     get[String]("name") ~
@@ -64,5 +65,9 @@ object Settings {
 
   def repositoryLocation: String = {
     getByName(REPO_LOCATION, "c:/music/")
+  }
+  
+  def temporaryLocation: String = {
+    repositoryLocation + getByName(TEMP_LOCATION, "temp/")
   }
 }

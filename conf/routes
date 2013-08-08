@@ -11,6 +11,11 @@ GET 	/logout						controllers.AuthenticationController.logout
 GET 	/upload						controllers.UploadController.uploadPage
 POST	/upload 					controllers.UploadController.upload
 
+#manage
+GET 	/edit/genres				controllers.ManageController.genresPage
+GET 	/edit/genres/delete			controllers.ManageController.deleteGenre(id: Long)
+GET 	/edit/artists				controllers.ManageController.artistsPage(genreid: Long)
+
 # Home page
 GET     /                           controllers.Application.index
 GET		/get 						controllers.Application.get(id: Long)

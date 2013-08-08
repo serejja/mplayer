@@ -18,28 +18,53 @@
 	</div>
 	<br>
 
-	<div id="tabsholder">
+	<div id="tabsholder" style="height:35%;">
 		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 	        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
 	        <li><a href="#artists" data-toggle="tab">Artists</a></li>
 	        <li><a href="#albums" data-toggle="tab">Albums</a></li>
 	    </ul>
-	    <div id="my-tab-content" class="tab-content">
+	    <div id="my-tab-content" class="tab-content" style="overflow:auto;max-height:95%;">
 	        <div class="tab-pane active" id="genres">
-	            <table class="table table-hover table-condensed" id="genrestable"></table>
+	            <table class="table table-hover table-condensed table-striped" id="genrestable"></table>
 	        </div>
 	        <div class="tab-pane" id="artists">
-	            <table class="table table-hover table-condensed" id="artiststable"></table>
+	            <table class="table table-hover table-condensed table-striped" id="artiststable"><th>Nothing to show</th></table>
 	        </div>
 	        <div class="tab-pane" id="albums">
-	            <table class="table table-hover table-condensed" id="albumstable"></table>
+	            <table class="table table-hover table-condensed table-striped" id="albumstable"><th>Nothing to show</th></table>
 	        </div>
 	    </div>
 	</div>
-	<br>
+	<hr>
+	<div id="tracksholder" style="height:58%;">
+		<b>Playlist</b>
+		<table id="trackstable" class="table table-hover table-condensed table-striped">
+			<th>Nothing to show</th>
+		</table>
+	</div>
 
-	<table id="trackstable" class="table table-hover table-condensed">
-		<tr class="play" href="#"><td id="1">1</td></tr>
-		<tr class="play" href="#"><td id="2">2</td></tr>
-	</table>
+	<script type="text/javascript">
+	    $(document).ready(function(){
+	        $("#jplayer").jPlayer({
+	            ready: function () {
+	                $(this).jPlayer("setMedia", {
+	                    mp3: "/get?id=1"
+	                });
+	            },
+	            swfPath: "/js",
+	            supplied: "mp3"
+	        });
+
+	        $('#volume').slider({
+	            formater: function(value) {
+	                $("#jplayer").jPlayer("volume", value/100);
+	                return 'Volume: ' + value;
+	            }
+	        });
+
+	        $("#tabs").tab();
+	        fillGenres();
+	    });
+    </script>
 }

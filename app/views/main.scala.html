@@ -17,6 +17,7 @@
         <script src="@routes.Assets.at("javascripts/jquery.jplayer.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/underscore-min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/bootstrap-slider.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/splitter.js")" type="text/javascript"></script>
         <style>
             #volume .slider-handle {
                 background: #5AB35A;
@@ -36,28 +37,6 @@
             @content
 
             <script type="text/javascript">
-                $(document).ready(function(){
-                    $("#jplayer").jPlayer({
-                        ready: function () {
-                            $(this).jPlayer("setMedia", {
-                                mp3: "/get?id=1"
-                            });
-                        },
-                        swfPath: "/js",
-                        supplied: "mp3"
-                    });
-
-                    $('#volume').slider({
-                        formater: function(value) {
-                            $("#jplayer").jPlayer("volume", value/100);
-                            return 'Volume: ' + value;
-                        }
-                    });
-
-                    $("#tabs").tab();
-                    fillGenres();
-                });
-
                 function updatePlayer(id){
                     var player = $("#jplayer");
 
@@ -99,6 +78,7 @@
                     $.getJSON("/artists?genreid=" + genreid, function(json) {
                         var table = $("#artiststable");
                         table.empty();
+                        headers(table, ["Name"]);
                         $.each(json, function() {
                             var tbl_row = $("<tr>", {href: "#", class: "loadalbums", id: this.id});
                             var tbl_cell = $("<td>", {id: this.id, html: this.name});
@@ -118,14 +98,7 @@
                     $.getJSON("/albums?artistid=" + artistid, function(json) {
                         var table = $("#albumstable");
                         table.empty();
-                        var tbl_header_row = $("<tr>", {});
-                        var tbl_header_cell_year = $("<th>", {html: "Year"});
-                        var tbl_header_cell_name = $("<th>", {html: "Name"});
-                        var tbl_header_cell_format = $("<th>", {html: "Format"});
-                        tbl_header_row.append(tbl_header_cell_year);
-                        tbl_header_row.append(tbl_header_cell_name);
-                        tbl_header_row.append(tbl_header_cell_format);
-                        table.append(tbl_header_row);
+                        headers(table, ["Year", "Name", "Format"]);
                         $.each(json, function() {
                             var tbl_row = $("<tr>", {href: "#", class: "loadtracks", id: this.id});
                             var tbl_cell_year = $("<td>", {id: this.id, html: this.year});
@@ -149,12 +122,7 @@
                     $.getJSON("/tracks?albumid=" + albumid, function(json) {
                         var table = $("#trackstable");
                         table.empty();
-                        var tbl_header_row = $("<tr>", {});
-                        var tbl_header_cell_name = $("<th>", {html: "Title"});
-                        var tbl_header_cell_duration = $("<th>", {html: "Duration"});
-                        tbl_header_row.append(tbl_header_cell_name);
-                        tbl_header_row.append(tbl_header_cell_duration);
-                        table.append(tbl_header_row);
+                        headers(table, ["Title", "Duration"]);
                         $.each(json, function() {
                             var tbl_row = $("<tr>", {class: "play", href: "#"});
                             var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
@@ -171,10 +139,19 @@
                         return false;
                     });
                 }
+
+                function headers(table, headers) {
+                    var tbl_header_row = $("<tr>", {});
+                    $.each(headers, function() {
+                        var tbl_header_cell = $("<th>", {html: this});
+                        tbl_header_row.append(tbl_header_cell);
+                    });
+                    table.append(tbl_header_row);
+                }
             </script>
         </div>
         <footer class="footer" style="background-color:#f0f0f0">
-            <small><a href="/upload">Upload a release</a></small>
+            <small><a href="@routes.UploadController.uploadPage">Upload a release</a> | <a href="@routes.ManageController.genresPage">Manage music</a></small>
         </footer>
     </body>
 </html>

@@ -1,0 +1,26 @@
+@(genres: List[models.Genre])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Edit Genres") {
+	<table class="table table-condensed table-striped">
+		<thead>
+		    <tr>
+		    	<td><em><b>ID</b></em></td>
+		    	<td><em><b>Name</b></em></td>
+		    	<td><em><b>Action</b></em></td>
+		    </tr>
+	    </thead>
+	    <tbody>
+	        @for(genre <- genres) {
+	            <tr>
+	            	<td><a href="@routes.ManageController.artistsPage(genre.id)">@genre.id</a></td>
+	            	<td>@genre.name</td>
+	            	<td><a href="@routes.ManageController.deleteGenre(genre.id)">x</a></td>
+	            </tr>
+	        }
+	    </tbody>
+	</table>
+
+}
