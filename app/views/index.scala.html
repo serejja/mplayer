@@ -5,7 +5,7 @@
 
 @main("mplayer") {
 	<div class="pull-right" style="padding-right:5px;">
-		<small>Logged in as @request.session.get("username")</small>
+		<small>Logged in as <a href="@routes.UserController.settingsPage(request.session.get("userid").getOrElse("-1").toLong)">@request.session.get("username")</a></small>
 		<small><a href="/logout">Logout</a></small>
 	</div>
 	<div id="jplayer"></div>
@@ -83,5 +83,11 @@
 				});
 			});
 	    });
+
+	    function updateNowPlaying(artist, track) {
+            $.getJSON("/updatenowplaying?artist=" + artist + "&track=" + track + "&userid=" + @request.session.get("userid").getOrElse("-1").toLong, function(json) {
+                return false;
+            });
+        }
     </script>
 }

@@ -58,16 +58,19 @@
                         playNext();
                     });
 
-                  updateTrackInfo(id);
+                    updateTrackInfo(id);
                 }
 
                 function updateTrackInfo(id) {
                     $.getJSON("/trackinfo?id=" + id, function(json) {
                         var nowplaying = $("#nowplaying");
                         nowplaying.text(json.artist + " - " + json.title + " (" + json.duration + ")");
+                        updateNowPlaying(json.artist, json.title)
                         return false;
                     });
                 }
+
+                
 
                 function playNext() {
                     var nextrow = $("#trackstable > tbody > tr.success").next("tr");

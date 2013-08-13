@@ -18,7 +18,7 @@ object AuthenticationController extends Controller {
       },
       value => {
         if (User.authenticate(value)) {
-          Redirect(routes.Application.index).withSession("logged" -> "y", "username" -> value.name)
+          Redirect(routes.Application.index).withSession("logged" -> "y", "username" -> value.name, "userid" -> value.id.toString)
         } else {
           Redirect(routes.AuthenticationController.loginPage)
         }

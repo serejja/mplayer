@@ -1,0 +1,6 @@
+@(userid: Long)
+
+@main("LastFM authorization") {
+	Please authorize in the opened window and press "Done" to complete authorization<br>
+	<a href="@routes.LastFmController.getSessionKey(userid)">Done</a>
+}

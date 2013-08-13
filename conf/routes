@@ -7,9 +7,19 @@ GET 	/login						controllers.AuthenticationController.loginPage
 POST	/login 						controllers.AuthenticationController.login
 GET 	/logout						controllers.AuthenticationController.logout
 
+#user settings
+GET 	/settings					controllers.UserController.settingsPage(id: Long)
+POST	/settings 					controllers.UserController.saveSettings
+
 #upload
 GET 	/upload						controllers.UploadController.uploadPage
 POST	/upload 					controllers.UploadController.upload
+
+#lastfm
+GET 	/token						controllers.LastFmController.token
+GET 	/session					controllers.LastFmController.getSessionKey(id: Long)
+GET 	/authorize					controllers.LastFmController.authorize(id: Long)
+GET 	/updatenowplaying			controllers.LastFmController.updateNowPlaying(artist: String, track: String, userid: Long)
 
 #manage
 GET 	/edit/genres				controllers.ManageController.genresPage
