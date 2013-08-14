@@ -32,4 +32,9 @@ object LastFmController extends AbstractController {
     LastFm.updateNowPlaying(artist, track, User.byId(userid))
     Ok("")
   }
+
+  def scrobble(artist: String, track: String, timestamp: String, userid: Long) = withAuth { implicit request =>
+    LastFm.scrobble(artist, track, timestamp, User.byId(userid))
+    Ok("")
+  }
 }

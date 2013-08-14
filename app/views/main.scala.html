@@ -36,6 +36,12 @@
             @content
 
             <script type="text/javascript">
+                var currentId = 0;
+                var currentArtist = "";
+                var currentTrack = "";
+                var currentDuration = "";
+                var currentTimestamp = 0;
+
                 function updatePlayer(id){
                     var player = $("#jplayer");
 
@@ -55,6 +61,7 @@
                     player.jPlayer("play");
                     player.bind($.jPlayer.event.ended, function(event) {
                         console.log("song ended");
+                        scrobble(currentArtist, currentTrack, currentTimestamp);
                         playNext();
                     });
 
@@ -64,8 +71,13 @@
                 function updateTrackInfo(id) {
                     $.getJSON("/trackinfo?id=" + id, function(json) {
                         var nowplaying = $("#nowplaying");
-                        nowplaying.text(json.artist + " - " + json.title + " (" + json.duration + ")");
-                        updateNowPlaying(json.artist, json.title)
+                        currentId = id;
+                        currentArtist = json.artist;
+                        currentTrack = json.title;
+                        currentDuration = json.duration;
+                        currentTimestamp = Math.round(+new Date()/1000);
+                        nowplaying.text(currentArtist + " - " + currentTrack + " (" + currentDuration + ")");
+                        updateNowPlaying(currentArtist, currentTrack);
                         return false;
                     });
                 }

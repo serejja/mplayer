@@ -1,0 +1,16 @@
+@(caption: String, id: String, optionValues:Seq[(String, String)], div: String, value: Any)
+
+<div class="clearfix @div" id="@id.concat("_field")">
+<label for="@id">
+	@caption
+</label>
+	<select class="@div" id="@id" name="@id">
+		@for(option: (String, String) <- optionValues) {
+			@if(option._1 == value) { 
+				<option selected value="@option._1">@option._2</option>
+			} else {
+				<option value="@option._1">@option._2</option>
+			}
+		}
+	</select>
+</div>

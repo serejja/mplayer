@@ -67,4 +67,8 @@ object Albums {
         " WHERE id = {id} ").on('id -> albumid).execute
     }
   }
+  
+  def getFormats: Seq[(String, String)] = {
+    Seq("LP" -> "LP", "EP" -> "EP", "Single" -> "Single")
+  }
 }

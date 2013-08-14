@@ -17,6 +17,12 @@ object Genres {
       case id ~ name => Genre(id, name)
     })
 
+  val optionParser = (
+    get[Long]("id") ~
+    get[String]("name") map {
+      case id ~ name => (id.toString -> name)
+    })
+
   implicit val writer = Json.writes[Genre]
 
   def all: List[Genre] = {
@@ -34,7 +40,7 @@ object Genres {
         " WHERE id = {id}").on('id -> genreid).single(Genres.parser)
     }
   }
-  
+
   def byAlbumId(albumid: Long): Genre = {
     DB.withConnection { implicit connection =>
       SQL("SELECT g.id, g.name " +
@@ -45,7 +51,7 @@ object Genres {
         " LIMIT 1").on('id -> albumid).single(Genres.parser)
     }
   }
-  
+
   def delete(genreid: Long) {
     val genre = Genres.byId(genreid)
     Artists.byGenre(genreid).foreach(artist => Artists.delete(artist.id))
@@ -53,6 +59,13 @@ object Genres {
     DB.withConnection { implicit connection =>
       SQL("DELETE FROM genres " +
         " WHERE id = {id} ").on('id -> genreid).execute
+    }
+  }
+
+  def getOptions: Seq[(String, String)] = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT id, name " +
+        " FROM genres").as(optionParser *)
     }
   }
 }

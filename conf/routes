@@ -20,6 +20,7 @@ GET 	/token						controllers.LastFmController.token
 GET 	/session					controllers.LastFmController.getSessionKey(id: Long)
 GET 	/authorize					controllers.LastFmController.authorize(id: Long)
 GET 	/updatenowplaying			controllers.LastFmController.updateNowPlaying(artist: String, track: String, userid: Long)
+GET 	/scrobble					controllers.LastFmController.scrobble(artist: String, track: String, timestamp: String, userid: Long)
 
 #manage
 GET 	/edit/genres				controllers.ManageController.genresPage

@@ -82,34 +82,44 @@ object LastFm {
 
   def requestSession: String = {
     val token = Token.actual
-    val futureSession = WS.url(s"http://ws.audioscrobbler.com/2.0/?method=auth.getSession&token=${token.token}&api_key=${Settings.lastfmApiKey}&api_sig=${getApiSignature(token, "auth.getSession")}&format=json").get.map { response =>
+    val futureSession = WS.url(s"http://ws.audioscrobbler.com/2.0/?method=auth.getSession&token=${token.token}&api_key=${Settings.lastfmApiKey}&api_sig=${md5(s"api_key${Settings.lastfmApiKey}methodauth.getSessiontoken${token.token}${Settings.lastfmSecret}")}&format=json").get.map { response =>
       System.out.println(response.json)
       (response.json \ "session" \ "key").as[String]
     }
     Await.result(futureSession, 5 seconds)
   }
 
-  def getApiSignature(token: Token, method: String): String = {
-    System.out.println(md5(s"api_key${Settings.lastfmApiKey}method${method}token${token.token}${Settings.lastfmSecret}"))
-    System.out.println(s"api_key${Settings.lastfmApiKey}method${method}token${token.token}${Settings.lastfmSecret}")
-    md5(s"api_key${Settings.lastfmApiKey}method${method}token${token.token}${Settings.lastfmSecret}")
-  }
-
   def updateNowPlaying(artist: String, track: String, user: User) {
     val method = "track.updateNowPlaying"
     val sessionKey = user.sessionKey
-    val url = "http://ws.audioscrobbler.com/2.0/"
+    val url = Settings.lastfmApiUrl
     val futureUpdate = WS.url(url).post(Map("method" -> Seq(method),
       "artist" -> Seq(artist),
       "track" -> Seq(track),
       "api_key" -> Seq(Settings.lastfmApiKey),
-      "api_sig" -> /*Seq(getApiSignature(requestToken, method)*/ Seq(md5(s"api_key${Settings.lastfmApiKey}artist${artist}method${method}sk${sessionKey}track${track}${Settings.lastfmSecret}")),
+      "api_sig" -> Seq(md5(s"api_key${Settings.lastfmApiKey}artist${artist}method${method}sk${sessionKey}track${track}${Settings.lastfmSecret}")),
       "sk" -> Seq(sessionKey),
       "format" -> Seq("json"))).map { response =>
-        System.out.println(s"api_key${Settings.lastfmApiKey}artist${artist}method${method}sk${sessionKey}track${track}${Settings.lastfmSecret}")
       System.out.println(response.json)
     }
     Await.result(futureUpdate, 5 seconds)
+  }
+
+  def scrobble(artist: String, track: String, timestamp: String, user: User) {
+    val method = "track.scrobble"
+    val sessionKey = user.sessionKey
+    val url = Settings.lastfmApiUrl
+    val futureScrobble = WS.url(url).post(Map("method" -> Seq(method),
+      "artist" -> Seq(artist),
+      "track" -> Seq(track),
+      "timestamp" -> Seq(timestamp),
+      "api_key" -> Seq(Settings.lastfmApiKey),
+      "sk" -> Seq(sessionKey),
+      "format" -> Seq("json"),
+      "api_sig" -> Seq(md5(s"api_key${Settings.lastfmApiKey}artist${artist}method${method}sk${sessionKey}timestamp${timestamp}track${track}${Settings.lastfmSecret}")))).map { response =>
+      System.out.println(response.json)
+    }
+    Await.result(futureScrobble, 5 seconds)
   }
 
   private def md5(s: String): String = {

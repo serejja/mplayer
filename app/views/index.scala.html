@@ -56,11 +56,7 @@
 
 	    $(document).ready(function(){
 	        $("#jplayer").jPlayer({
-	            ready: function () {
-	                $(this).jPlayer("setMedia", {
-	                    mp3: "/get?id=1"
-	                });
-	            },
+	            ready: function () {},
 	            swfPath: "/js",
 	            supplied: "mp3"
 	        });
@@ -88,6 +84,12 @@
             $.getJSON("/updatenowplaying?artist=" + artist + "&track=" + track + "&userid=" + @request.session.get("userid").getOrElse("-1").toLong, function(json) {
                 return false;
             });
+        }
+
+        function scrobble(artist, track, timestamp) {
+        	$.getJSON("/scrobble?artist=" + artist + "&track=" + track + "&timestamp=" + timestamp + "&userid=" + @request.session.get("userid").getOrElse("-1").toLong, function(json) {
+                return false;
+            });	
         }
     </script>
 }

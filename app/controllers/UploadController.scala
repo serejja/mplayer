@@ -4,6 +4,8 @@ import play.api.mvc._
 import java.io.File
 import service._
 import scala.collection.mutable.HashMap
+import models.Genres
+import models.Albums
 
 object UploadController extends AbstractController {
   private val PARAM_GENRE = "genre"
@@ -13,7 +15,7 @@ object UploadController extends AbstractController {
   private val PARAM_FORMAT = "format"
 
   def uploadPage = withAuth { implicit request =>
-    Ok(views.html.upload())
+    Ok(views.html.upload(Genres.getOptions, Albums.getFormats))
   }
 
   def upload = Action(parse.multipartFormData) { implicit request =>
@@ -27,6 +29,7 @@ object UploadController extends AbstractController {
         release.ref.moveTo(file)
         Release.fromFile(file, getParam(PARAM_GENRE), getParam(PARAM_ARTIST), getParam(PARAM_ALBUM), getParam(PARAM_YEAR), getParam(PARAM_FORMAT))
         Log.debug("Uploaded " + release.filename)
+        release.ref.clean
         Ok("File uploaded")
       } else {
         Log.warn("Not all parameters supplied for release " + release.filename)

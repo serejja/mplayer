@@ -1,14 +1,35 @@
+@(genres: Seq[(String, String)], formats: Seq[(String, String)])
+
 @import helper._
 @import helper.twitterBootstrap._
+@import views.html.tags._
 
 @main("Upload a release") {
 	@helper.form(action = routes.UploadController.upload, 'enctype -> "multipart/form-data") {
-	    <input type="file" name="release"><br>
-	    <input type="text" name="genre" placeholder="Genre"><br>
-	    <input type="text" name="artist" placeholder="Artist"><br>
-	    <input type="text" name="album" placeholder="Album"><br>
-	    <input type="text" name="year" placeholder="Year"><br>
-	    <input type="text" name="format" placeholder="Format"><br>
-	    <input type="submit" value="Upload">
+		<fieldset>
+			<div class="controls controls-row">
+		    	@file("Archive file", "release", "span3")
+		    </div>
+		    <div class="controls controls-row">
+				@dropdown_combo("Genre", "genre", genres, "span3", null)
+			</div>
+			<div class="controls controls-row">
+				@input_text_2("Artist", "artist", "span3")
+		    </div>
+		    <div class="controls controls-row">
+		    	@input_text_2("Album", "album", "span3")
+		    </div>
+		    <div class="controls controls-row">
+		    	@input_text_2("Year", "year", "span3")
+		    </div>
+		    <div class="controls controls-row">
+		    	@dropdown_combo("Format", "format", formats, "span3", null)
+		    </div>
+		    <div class="controls controls-row">
+		    	<div class="clearfix span3">
+		    		<input type="submit" value="Upload">
+		    	</div>
+		    </div>
+	    </fieldset>
 	}
 } 

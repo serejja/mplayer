@@ -1,0 +1,8 @@
+@(caption: String, id: String, div: String)
+
+<div class="clearfix @div" id="@id.concat("_field")">
+<label for="@id">
+	@caption
+</label>
+	<input type="file" id="@id" name="@id">
+</div>

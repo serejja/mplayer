@@ -15,6 +15,7 @@ object Settings {
   private val TEMP_LOCATION = "temp_location"
   private val LAST_FM_API_KEY = "lastfm_api_key"
   private val LAST_FM_SECRET_KEY = "lastfm_secret"
+  private val LAST_FM_API_URL = "lastfm_api_url"
 
   private lazy val parser = {
     get[String]("name") ~
@@ -79,5 +80,9 @@ object Settings {
   
   def lastfmSecret: String = {
     getByName(LAST_FM_SECRET_KEY, "f35a156fccfe2963b6051e23c1c2aa99")
+  }
+  
+  def lastfmApiUrl: String = { 
+    getByName(LAST_FM_API_URL, "http://ws.audioscrobbler.com/2.0/")
   }
 }
