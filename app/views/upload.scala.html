@@ -5,6 +5,7 @@
 @import views.html.tags._
 
 @main("Upload a release") {
+	<a href="@routes.Application.index">Back</a><br>
 	@helper.form(action = routes.UploadController.upload, 'enctype -> "multipart/form-data") {
 		<fieldset>
 			<div class="controls controls-row">
