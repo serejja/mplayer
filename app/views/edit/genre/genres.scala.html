@@ -1,0 +1,122 @@
+@import helper._
+@import helper.twitterBootstrap._
+@import views.html.tags._
+
+@main("Edit Genres") {
+	<div id="edit" class="modal hide fade">
+	    <div class="modal-body">
+	    	<h3>Edit Genre</h3>
+	    	<div class="controls controls-row">
+	    		@input_text_2("ID", "id", "span1", true)
+	    		@input_text_2("Name", "name", "span4")
+	    	</div>
+	    </div>
+	    <div class="modal-footer">
+	    	<div class="pull-left">
+	    		<button id="delete" href="#" class="btn btn-danger">Delete</button>
+	    	</div>
+	    	<button id="save" href="#" class="btn btn-success">OK</button>
+	    	<button id="cancel" href="#" class="btn btn-primary">Cancel</button>
+	    </div>
+	</div>
+
+	<a href="@routes.ManageController.genresPage">Back</a>
+	<table id="genres" class="table table-condensed table-striped table-hover">
+	</table>
+
+	<script>
+		$(document).ready(function() {
+			$("#edit").on("show", function() {
+		        $("#save").on("click", function(e) {
+		            saveChanges();
+		            $("#edit").modal('hide');
+		        });
+		        $("#cancel").on("click", function(e) {
+		            console.log("cancel pressed");
+		            $("#edit").modal('hide');
+		        });
+		        $("#delete").on("click", function(e) {
+		            console.log("delete pressed");
+		            $("#edit").modal('hide');
+		        });
+		    });
+
+		    $("#edit").on("hide", function() {
+		        $("#save").off("click");
+		        $("#cancel").off("click");
+		    });
+
+		    $(document).keyup(function(e) {
+				if (e.keyCode == 27) { $("#edit").modal('hide'); }
+			});
+
+	        fillTable();
+	    });
+
+	    function fillTable() {
+	    	$.getJSON("/genres", function(json) {
+                var table = $("#genres");
+                table.empty();
+                headers(table, ["ID", "Name", "Action"]);
+                highlightOnClick(table);
+                $.each(json, function() {
+                    var tbl_row = $("<tr>", {href: "#", id: this.id});
+                    var tbl_cell_id = $("<td>", {id: this.id, html: this.id});
+                    var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
+                    var tbl_cell_action = $("<td>", {id: this.id, href: "/edit/artists/delete?id=" + this.id, html: "x"});
+                    tbl_row.append(tbl_cell_id);
+                    tbl_row.append(tbl_cell_name);
+                    tbl_row.append(tbl_cell_action);
+                    var id = this.id;
+                    setClickHandlers(tbl_row, function() {
+                        edit(id);
+                    }, function() {
+                        window.alert("go to albums");
+                    });
+                    table.append(tbl_row);
+                })
+                return false;
+            });
+	    }
+
+	    function edit(id) {
+	    	prepareEditWindow(id);
+			showEditWindow();
+	    }
+
+	    function prepareEditWindow(genreid) {
+	    	$.getJSON("/genres/" + genreid, function(json) {
+                $('#id').val(json.id);
+                $('#name').val(json.name);
+                return false;
+            });
+	    }
+
+	    function showEditWindow() {
+	    	$("#edit").modal({
+		      "backdrop"  : "static",
+		      "keyboard"  : true,
+		      "show"      : true
+		    });
+	    }
+
+	    function saveChanges() {
+	    	var id = $('#id').val();
+	    	var name = $('#name').val();
+	    	$.ajax({
+			    type : 'PUT',
+			    url : "/genres",
+			    data : { id : id, name : name },
+			    dataType : "text",
+			    success : function(data) {
+			    	fillTable();
+			        console.log(data);
+			    },
+			    error : function(data) {
+			        console.log("Error! " + data);
+			    }
+			});
+	    }
+	</script>
+}
+

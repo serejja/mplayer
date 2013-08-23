@@ -1,9 +1,10 @@
-@(caption: String, id: String, classes: String)
+@(caption: String, id: String, classes: String, disabled: Boolean = false)
 
 <div class="clearfix @classes" id="@id.concat("_field")">
     <label for="@id">@caption</label>
     <input type="text" id="@id"
     name="@id"
     placeholder="@caption"
-    class="@classes">
+    class="@classes" @if(disabled) { disabled }
+    value="">
 </div>

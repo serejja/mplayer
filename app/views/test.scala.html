@@ -1,0 +1,10 @@
+@reusableBlock(isAdmin: Boolean, value: String) = {
+    @if(isAdmin){
+        <a href="/admin/@value">@value</a>
+    } else {
+        <a href="/@value">@value</a>
+    }
+}
+
+<h1>@reusableBlock(true, "config")</h1>
+<h1>@reusableBlock(false, "config")</h1>

@@ -4,14 +4,15 @@ import models.Genres
 import models.Artists
 import models.Albums
 import models.Tracks
+import models.Countries
 
 object ManageController extends AbstractController {
 	def genresPage = withAuth { implicit request =>
-	  Ok(views.html.edit.genres(Genres.all))
+	  Ok(views.html.edit.genre.genres())
 	}
 	
 	def artistsPage(genreid: Long) = withAuth { implicit request =>
-	  Ok(views.html.edit.artists(Artists.byGenre(genreid)))
+	  Ok(views.html.edit.artist.artists(genreid, Genres.comboOptions, Countries.comboOptions))
 	}
 	
 	def albumsPage(artistid: Long) = withAuth { implicit request =>

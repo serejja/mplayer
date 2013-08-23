@@ -19,11 +19,6 @@ object Application extends AbstractController {
     Ok(Json.toJson(Genres.all))
   }
   
-  def artists(genreid: Long) = withAuth { implicit request =>
-    import models.Artists._
-    Ok(Json.toJson(Artists.byGenre(genreid)))
-  }
-  
   def albums(artistid: Long) = withAuth { implicit request =>
     import models.Albums._
     Ok(Json.toJson(Albums.byArtist(artistid)))
@@ -42,11 +37,15 @@ object Application extends AbstractController {
   
   def trackinfo(id: Long) = withAuth { implicit request =>
     import models.Tracks._
-    Ok(Json.toJson(Tracks.trackInfo(id)))
+    Ok(Json.toJson(Tracks.byId(id)))
   }
 
   def get(id: Long) = withAuth { implicit request =>
     val track = Tracks.byId(id)
     Ok.sendFile(content = new File(track.location))
+  }
+  
+  def test = Action {
+    Ok(views.html.test())
   }
 }

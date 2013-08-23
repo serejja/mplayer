@@ -15,7 +15,7 @@ object UploadController extends AbstractController {
   private val PARAM_FORMAT = "format"
 
   def uploadPage = withAuth { implicit request =>
-    Ok(views.html.upload(Genres.getOptions, Albums.getFormats))
+    Ok(views.html.upload(Genres.comboOptions, Albums.getFormats))
   }
 
   def upload = Action(parse.multipartFormData) { implicit request =>

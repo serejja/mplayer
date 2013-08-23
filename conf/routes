@@ -32,12 +32,20 @@ GET 	/edit/artists/delete		controllers.ManageController.deleteArtist(id: Long)
 GET 	/edit/albums/delete			controllers.ManageController.deleteAlbum(id: Long)
 GET 	/edit/tracks/delete			controllers.ManageController.deleteTrack(id: Long)
 
-# Home page
+#player
 GET     /                           controllers.Application.index
 GET		/get 						controllers.Application.get(id: Long)
-GET 	/genres						controllers.Application.genres
-GET 	/artists					controllers.Application.artists(genreid: Long)
+
+#getters
+GET 	/genres						controllers.GenreController.genres
+GET 	/genres/:id 				controllers.GenreController.genre(id: Long)
+PUT 	/genres 	 				controllers.GenreController.update
+
+GET 	/artists					controllers.ArtistController.artists(genreid: Long)
+GET 	/artists/:id 				controllers.ArtistController.artist(id: Long)
+
 GET 	/albums						controllers.Application.albums(artistid: Long)
+
 GET 	/tracks						controllers.Application.tracks(albumid: Long ?= -1, artistid: Long ?= -1, genreid: Long ?= -1)
 GET 	/trackinfo					controllers.Application.trackinfo(id: Long)
 

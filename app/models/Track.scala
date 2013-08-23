@@ -9,18 +9,25 @@ import java.io.File
 import service.FileUtils._
 import service.Log
 
-case class Track(id: Long, name: String, duration: String, location: String, albumid: Long)
+case class Track(id: Long, name: String, duration: String, location: String, album: Album) {
+  def toJson: JsValue = {
+    Tracks.writer.writes(this)
+  }
+}
 
 case class TrackInfo(artist: String, title: String, duration: String)
 
 object Tracks {
+  private val columns = " t.id AS track$id, t.name AS track$name, t.duration AS track$duration, t.location AS track$location, " + Albums.columns
+  private val from = " FROM tracks t INNER JOIN albums al ON t.album_id = al.id INNER JOIN artists a on al.artist_id = a.id INNER JOIN genres g on a.genre_id = g.id LEFT JOIN countries c ON a.country_id = c.id "
+  
   val parser = (
-    get[Long]("id") ~
-    get[String]("name") ~
-    get[String]("duration") ~
-    get[String]("location") ~
-    get[Long]("album_id") map {
-      case id ~ name ~ duration ~ location ~ albumid => Track(id, name, duration, location, albumid)
+    get[Long]("track$id") ~
+    get[String]("track$name") ~
+    get[String]("track$duration") ~
+    get[String]("track$location") ~
+    Albums.parser map {
+      case id ~ name ~ duration ~ location ~ album => Track(id, name, duration, location, album)
     })
 
   val trackInfoParser = (
@@ -30,36 +37,39 @@ object Tracks {
       case artist ~ title ~ duration => TrackInfo(artist, title, duration)
     })
 
-  implicit val writer = Json.writes[Track]
+  implicit val writer = new Writes[Track] {
+    def writes(c: Track): JsValue = {
+      Json.obj("id" -> c.id,
+        "name" -> c.name,
+        "duration" -> c.duration,
+        "location" -> c.location,
+        "album" -> c.album.toJson)
+    }
+  }
   implicit val trackInfoWriter = Json.writes[TrackInfo]
 
   def byAlbum(albumid: Long): List[Track] = {
     DB.withConnection { implicit connection =>
-      SQL("SELECT id, name, duration, location, album_id " +
-        " FROM tracks " +
-        " WHERE album_id = {albumid} " +
-        " ORDER BY id").on('albumid -> albumid).as(Tracks.parser *)
+      SQL("SELECT " + columns +
+        from +
+        " WHERE t.album_id = {albumid} " +
+        " ORDER BY t.id").on('albumid -> albumid).as(Tracks.parser *)
     }
   }
   
   def byArtist(artistid: Long): List[Track] = {
     DB.withConnection { implicit connection =>
-      SQL("SELECT t.id, t.name, t.duration, t.location, t.album_id " +
-        " FROM tracks t" +
-        " INNER JOIN albums al ON t.album_id = al.id " +
-        " INNER JOIN artists ar ON al.artist_id = ar.id" +
-        " WHERE ar.id = {artistid} " +
+      SQL("SELECT " + columns + 
+        from +
+        " WHERE a.id = {artistid} " +
         " ORDER BY t.id").on('artistid -> artistid).as(Tracks.parser *)
     }
   }
   
   def byGenre(genreid: Long): List[Track] = {
     DB.withConnection { implicit connection =>
-      SQL("SELECT t.id, t.name, t.duration, t.location, t.album_id " +
-        " FROM tracks t" +
-        " INNER JOIN albums al ON t.album_id = al.id " +
-        " INNER JOIN artists ar ON al.artist_id = ar.id " +
-        " INNER JOIN genres g ON ar.genre_id = g.id " +
+      SQL("SELECT " + columns +
+        from +
         " WHERE g.id = {genreid} " +
         " ORDER BY t.id").on('genreid -> genreid).as(Tracks.parser *)
     }
@@ -67,30 +77,30 @@ object Tracks {
 
   def byId(id: Long): Track = {
     val tracks = DB.withConnection { implicit connection =>
-      SQL("SELECT id, name, duration, location, album_id " +
-        " FROM tracks " +
-        " WHERE id = {id}").on('id -> id).as(Tracks.parser *)
+      SQL("SELECT " + columns +
+        from +
+        " WHERE t.id = {id}").on('id -> id).as(Tracks.parser *)
     }
     if (tracks.length > 0) tracks.head else null
   }
 
   def byNameAndAlbum(name: String, albumid: Long): Track = {
     val tracks = DB.withConnection { implicit connection =>
-      SQL("SELECT id, name, duration, location, album_id " +
-        " FROM tracks " +
-        " WHERE lower(name) = {name} AND album_id = {albumid}").on('name -> name.toLowerCase, 'albumid -> albumid).as(Tracks.parser *)
+      SQL("SELECT " + columns +
+        from +
+        " WHERE lower(t.name) = {name} AND album_id = {t.albumid}").on('name -> name.toLowerCase, 'albumid -> albumid).as(Tracks.parser *)
     }
-    Log.debug("" + tracks.length)
     if (tracks.length > 0) tracks.head else null
   }
 
   def add(name: String, duration: String, location: String, albumid: Long): Track = {
     if (!exists(name, albumid)) {
-      return DB.withConnection { implicit connection =>
+      val id = DB.withConnection { implicit connection =>
         SQL("INSERT INTO tracks (name, duration, location, album_id)" +
           " VALUES ({name}, {duration}, {location}, {albumid}) " +
-          " RETURNING id, name, duration, location, album_id").on('name -> name, 'duration -> duration, 'location -> location, 'albumid -> albumid).single(Tracks.parser)
+          " RETURNING id").on('name -> name, 'duration -> duration, 'location -> location, 'albumid -> albumid).single(get[Long]("id"))
       }
+      return byId(id)
     }
     null
   }
@@ -114,10 +124,10 @@ object Tracks {
 
   def trackInfo(trackid: Long): TrackInfo = {
     DB.withConnection { implicit connection =>
-      SQL("SELECT ar.name as artist, t.name as title, t.duration as duration " +
+      SQL("SELECT a.name as artist, t.name as title, t.duration as duration " +
         " FROM tracks t " +
         " INNER JOIN albums al on t.album_id = al.id " +
-        " INNER JOIN artists ar on al.artist_id = ar.id " +
+        " INNER JOIN artists a on al.artist_id = a.id " +
         " WHERE t.id = {id}").on('id -> trackid).single(Tracks.trackInfoParser)
     }
   }

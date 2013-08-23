@@ -50,9 +50,15 @@
 	</div>
 
 	<script type="text/javascript">
-		var DELAY = 200,
-	    clicks = 0,
-	    timer = null;
+		var currentId = 0;
+        var currentGenre = "";
+        var currentArtist = "";
+        var currentCountry = "";
+        var currentAlbum = "";
+        var currentYear = 0;
+        var currentTrack = "";
+        var currentDuration = "";
+        var currentTimestamp = 0;
 
 	    $(document).ready(function(){
 	        $("#jplayer").jPlayer({
@@ -80,6 +86,52 @@
 			});
 	    });
 
+	    function updatePlayer(id){
+            var player = $("#jplayer");
+
+            player.jPlayer({
+            ready: function () { 
+                $(this).jPlayer("setMedia", { 
+                    mp3: "get?id=" + id
+                }); 
+                $(this).jPlayer("play");
+            },
+            swfPath: "/js",
+            supplied: "mp3",
+            }); 
+            player.jPlayer("setMedia", { 
+                mp3: "get?id=" + id
+            }); 
+            player.jPlayer("play");
+            player.bind($.jPlayer.event.ended, function(event) {
+                console.log("song ended");
+                scrobble(currentArtist, currentTrack, currentTimestamp);
+                playNext();
+            });
+
+            updateTrackInfo(id);
+        }
+
+        function updateTrackInfo(id) {
+            $.getJSON("/trackinfo?id=" + id, function(json) {
+                var nowplaying = $("#nowplaying");
+                currentId = id;
+                currentGenre = json.album.artist.genre.name;
+                currentArtist = json.album.artist.name;
+                if (json.album.artist.country != undefined) {
+                	currentCountry = json.album.artist.country.name;
+            	}
+                currentAlbum = json.album.name;
+                currentYear = json.album.year;
+                currentTrack = json.name;
+                currentDuration = json.duration;
+                currentTimestamp = Math.round(+new Date()/1000);
+                nowplaying.text(currentArtist + " - " + currentTrack + " (" + currentDuration + ")");
+                updateNowPlaying(currentArtist, currentTrack);
+                return false;
+            });
+        }
+
 	    function updateNowPlaying(artist, track) {
             $.getJSON("/updatenowplaying?artist=" + artist + "&track=" + track + "&userid=" + @request.session.get("userid").getOrElse("-1").toLong, function(json) {
                 return false;
@@ -90,6 +142,127 @@
         	$.getJSON("/scrobble?artist=" + artist + "&track=" + track + "&timestamp=" + timestamp + "&userid=" + @request.session.get("userid").getOrElse("-1").toLong, function(json) {
                 return false;
             });	
+        }
+
+        function fillGenres() {
+            $.getJSON("/genres", function(json) {
+                var table = $("#genrestable");
+                table.empty();
+                highlightOnClick(table);
+                $.each(json, function() {
+                    var tbl_row = $("<tr>", {class: "loadartists", href: "#artists", id: this.id});
+                    var tbl_cell = $("<td>", {id: this.id, html: this.name});
+                    tbl_row.append(tbl_cell);
+                    var id = this.id;
+                    setClickHandlers(tbl_row, function() {
+                        fillArtists(id);
+                    }, function() {
+                        $.getJSON("/tracks?genreid=" + id, function(json) {
+                            console.log("/tracks?genreid=" + id);
+                            fillTracks(json);
+                        });
+                    });
+                    table.append(tbl_row);
+                })
+                return false;
+            });
+        }
+
+        function fillArtists(genreid) {
+            console.log("/artists?genreid=" + genreid);
+            $.getJSON("/artists?genreid=" + genreid, function(json) {
+                var table = $("#artiststable");
+                table.empty();
+                headers(table, ["Name"]);
+                highlightOnClick(table);
+                $.each(json, function() {
+                    var tbl_row = $("<tr>", {href: "#", class: "loadalbums", id: this.id});
+                    var tbl_cell = $("<td>", {id: this.id, html: this.name});
+                    tbl_row.append(tbl_cell);
+                    var id = this.id;
+                    setClickHandlers(tbl_row, function() {
+                        fillAlbums(id);
+                    }, function() {
+                        $.getJSON("/tracks?artistid=" + id, function(json) {
+                            console.log("/tracks?artistid=" + id);
+                            fillTracks(json);
+                        });
+                    });
+                    table.append(tbl_row);
+                })
+                $('#tabs a[href="#artists"]').tab('show');
+                return false;
+            });
+        }
+
+        function fillAlbums(artistid) {
+            console.log("/albums?artistid=" + artistid);
+            $.getJSON("/albums?artistid=" + artistid, function(json) {
+                var table = $("#albumstable");
+                table.empty();
+                headers(table, ["Year", "Name", "Format"]);
+                highlightOnClick(table);
+                $.each(json, function() {
+                    var tbl_row = $("<tr>", {href: "#", class: "loadtracks", id: this.id});
+                    var tbl_cell_year = $("<td>", {id: this.id, html: this.year});
+                    var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
+                    var tbl_cell_format = $("<td>", {id: this.id, html: this.format});
+                    tbl_row.append(tbl_cell_year);
+                    tbl_row.append(tbl_cell_name);
+                    tbl_row.append(tbl_cell_format);
+                    var id = this.id;
+                    setClickHandlers(tbl_row, function() {
+                        $.getJSON("/tracks?albumid=" + id, function(json) {
+                            console.log("/tracks?albumid=" + id);
+                            fillTracks(json);
+                        });
+                    }, function() {
+                        alert("Double click");
+                    });
+                    table.append(tbl_row);
+                })
+                $('#tabs a[href="#albums"]').tab('show');
+                return false;
+            });
+        }
+
+        function fillTracks(json) {
+            var table = $("#trackstable");
+            table.empty();
+            headers(table, ["#", "Title", "Duration", "Artist", "Country", "Album", "Year", "Genre"]);
+            highlightOnClick(table);
+            var count = 1;
+            $.each(json, function() {
+                var tbl_row = $("<tr>", {class: "play", href: "#", id: this.id});
+                var tbl_cell_no = $("<td>", {id: this.id, html: count++});
+                var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
+                var tbl_cell_duration = $("<td>", {id: this.id, html: this.duration});
+                var tbl_cell_artist = $("<td>", {id: this.id, html: this.album.artist.name});
+                var country = this.album.artist.country;
+                if (country != undefined) {
+                    var tbl_cell_country = $("<td>", {id: this.id, html: this.album.artist.country.name});
+                } else {
+                    var tbl_cell_country = $("<td>", {id: this.id, html: "-"});
+                }
+                var tbl_cell_album = $("<td>", {id: this.id, html: this.album.name});
+                var tbl_cell_year = $("<td>", {id: this.id, html: this.album.year});
+                var tbl_cell_genre = $("<td>", {id: this.id, html: this.album.artist.genre.name});
+                tbl_row.append(tbl_cell_no);
+                tbl_row.append(tbl_cell_name);
+                tbl_row.append(tbl_cell_duration);
+                tbl_row.append(tbl_cell_artist);
+                tbl_row.append(tbl_cell_country);
+                tbl_row.append(tbl_cell_album);
+                tbl_row.append(tbl_cell_year);
+                tbl_row.append(tbl_cell_genre);
+                tbl_row.click(function(event) {
+                    id = event.target.id
+                    console.log("get?id=" + id)
+                    updatePlayer(id)
+                });
+                table.append(tbl_row);
+            });
+            return false;
         }
     </script>
 }
