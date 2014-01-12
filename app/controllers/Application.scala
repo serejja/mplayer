@@ -10,6 +10,7 @@ import play.api.libs.json.Json
 import models._
 import java.io.FileInputStream
 import play.api.libs.iteratee.Enumerator
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object Application extends AbstractController {
   def index = withAuth { implicit request =>
