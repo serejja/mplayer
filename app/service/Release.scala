@@ -31,15 +31,15 @@ object Release {
 	    case Some(id) => Artists.create(genreid.toLong, artistname.get, id.toLong) 
 	    case None => Artists.byId(artistid.get.toLong)
 	  }
-	  val destinationReleaseLocation = createReleaseFolders(genreid, artist.name, albumName, year)
+	  val destinationReleaseLocation = createReleaseFolders(artist.genre.id, artist.name, albumName, year)
 	  val album = Albums.getOrNew(artist, albumName, year.toLong, format)
 	  val folder = new File(releaseTempLocation)
 	  recursiveAddFiles(folder.listFiles, destinationReleaseLocation, album)
 	  folder.delete
 	}
 	
-	def createReleaseFolders(genre: String, artist: String, album: String, year: String): String = {
-	  val releasePath = s"${Settings.repositoryLocation}${Genres.byId(genre.toLong).name}/${artist}/${year} - ${album}/"
+	def createReleaseFolders(genre: Long, artist: String, album: String, year: String): String = {
+	  val releasePath = s"${Settings.repositoryLocation}${Genres.byId(genre).name}/${artist}/${year} - ${album}/"
 	  new File(releasePath).mkdirs
 	  releasePath
 	}
