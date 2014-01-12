@@ -88,7 +88,7 @@ object Tracks {
     val tracks = DB.withConnection { implicit connection =>
       SQL("SELECT " + columns +
         from +
-        " WHERE lower(t.name) = {name} AND album_id = {t.albumid}").on('name -> name.toLowerCase, 'albumid -> albumid).as(Tracks.parser *)
+        " WHERE lower(t.name) = {name} AND t.album_id = {albumid}").on('name -> name.toLowerCase, 'albumid -> albumid).as(Tracks.parser *)
     }
     if (tracks.length > 0) tracks.head else null
   }

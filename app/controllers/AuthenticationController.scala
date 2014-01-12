@@ -26,6 +26,6 @@ object AuthenticationController extends Controller {
   }
 
   def logout = Action { implicit request =>
-    Ok(views.html.login(User.requestForm)).withSession("logged" -> "n")
+    Ok(views.html.login(User.requestForm)).withNewSession
   }
 }
