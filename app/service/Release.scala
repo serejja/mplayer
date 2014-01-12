@@ -34,7 +34,7 @@ object Release {
 	  val destinationReleaseLocation = createReleaseFolders(artist.genre.id, artist.name, albumName, year)
 	  val album = Albums.getOrNew(artist, albumName, year.toLong, format)
 	  val folder = new File(releaseTempLocation)
-	  recursiveAddFiles(folder.listFiles, destinationReleaseLocation, album)
+	  recursiveAddFiles(folder.listFiles.sorted, destinationReleaseLocation, album)
 	  folder.delete
 	}
 	

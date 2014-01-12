@@ -53,7 +53,7 @@ object Tracks {
       SQL("SELECT " + columns +
         from +
         " WHERE t.album_id = {albumid} " +
-        " ORDER BY t.id").on('albumid -> albumid).as(Tracks.parser *)
+        " ORDER BY t.track_no").on('albumid -> albumid).as(Tracks.parser *)
     }
   }
   
@@ -62,7 +62,7 @@ object Tracks {
       SQL("SELECT " + columns + 
         from +
         " WHERE a.id = {artistid} " +
-        " ORDER BY t.id").on('artistid -> artistid).as(Tracks.parser *)
+        " ORDER BY al.issue_year, t.track_no").on('artistid -> artistid).as(Tracks.parser *)
     }
   }
   
@@ -71,7 +71,7 @@ object Tracks {
       SQL("SELECT " + columns +
         from +
         " WHERE g.id = {genreid} " +
-        " ORDER BY t.id").on('genreid -> genreid).as(Tracks.parser *)
+        " ORDER BY a.id, al.issue_year, t.track_no").on('genreid -> genreid).as(Tracks.parser *)
     }
   }
   
@@ -80,7 +80,7 @@ object Tracks {
       SQL("SELECT " + columns +
         from +
         " WHERE c.id = {countryid} " +
-        " ORDER BY g.name, a.name, al.issue_year, t.id").on('countryid -> countryid).as(Tracks.parser *)
+        " ORDER BY g.name, a.name, al.issue_year, t.track_no").on('countryid -> countryid).as(Tracks.parser *)
     }
   }
 
@@ -102,12 +102,12 @@ object Tracks {
     if (tracks.length > 0) tracks.head else null
   }
 
-  def add(name: String, duration: String, location: String, albumid: Long): Track = {
+  def add(name: String, duration: String, location: String, trackNo: Int, albumid: Long): Track = {
     if (!exists(name, albumid)) {
       val id = DB.withConnection { implicit connection =>
-        SQL("INSERT INTO tracks (name, duration, location, album_id)" +
-          " VALUES ({name}, {duration}, {location}, {albumid}) " +
-          " RETURNING id").on('name -> name, 'duration -> duration, 'location -> location, 'albumid -> albumid).single(get[Long]("id"))
+        SQL("INSERT INTO tracks (name, duration, location, track_no, album_id)" +
+          " VALUES ({name}, {duration}, {location}, {trackNo}, {albumid}) " +
+          " RETURNING id").on('name -> name, 'duration -> duration, 'location -> location, 'trackNo -> trackNo, 'albumid -> albumid).single(get[Long]("id"))
       }
       return byId(id)
     }
