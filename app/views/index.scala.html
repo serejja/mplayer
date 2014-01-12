@@ -4,47 +4,65 @@
 @import helper.twitterBootstrap._
 
 @main("mplayer") {
+	<style>
+        #trackstable td, #genrestable td, #artiststable td, #albumstable td, #countriestable td {
+            padding: 0;
+        }
+    </style>
 	<div class="pull-right" style="padding-right:5px;">
 		<small>Logged in as <a href="@routes.UserController.settingsPage(request.session.get("userid").getOrElse("-1").toLong)">@request.session.get("username")</a></small>
 		<small><a href="/logout">Logout</a></small>
 	</div>
 	<div id="jplayer"></div>
-	<div id="jp_container_1">
-		<div class="pull-left" style="padding-right:5px;">
-			<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
-			<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
-		</div>
-		<div class="pull-left" style="padding-right:5px;">
-			<p id="nowplaying"></p>
-		</div>
-		<div class="pull-right" style="padding-right:20px;">
-			<input type="text" class="span2" id="volume" data-slider-min="0" data-slider-max="100" data-slider-value="50" data-slider-tooltip="hide" data-slider-id="volume">
-		</div>
+	<div id="jp_container_1" style="width:100%;">
+        <div class="controls controls-row">
+    		<div class="pull-left" style="padding-right:5px;">
+    			<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
+    			<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
+    		</div>
+    		<div class="pull-left" style="padding-right:5px;">
+    			<p id="nowplaying"></p>
+    		</div>
+    		<div class="pull-right" style="padding-right:20px;">
+    			<input type="text" class="span2" id="volume" data-slider-min="0" data-slider-max="100" data-slider-value="50" data-slider-tooltip="hide" data-slider-id="volume">
+    		</div>
+        </div>
+        <div class="controls controls-row" id="seekdiv" style="width:100%;">
+            <div style="padding-right:20px;padding-left:20px;width:100%;">
+                <input type="text" id="seek" data-slider-min="0" data-slider-max="100" data-slider-value="0" data-slider-tooltip="hide" data-slider-id="seek" style="width:100%;">
+            </div>
+        </div>
 	</div>
 	<br><br>
 
-	<div id="tabsholder" style="height:35%;">
-		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-	        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
-	        <li><a href="#artists" data-toggle="tab">Artists</a></li>
-	        <li><a href="#albums" data-toggle="tab">Albums</a></li>
-	    </ul>
-	    <div id="my-tab-content" class="tab-content" style="overflow:auto;max-height:95%;">
-	        <div class="tab-pane active" id="genres">
-	            <table class="table table-hover table-condensed table-striped" id="genrestable"></table>
-	        </div>
-	        <div class="tab-pane" id="artists">
-	            <table class="table table-hover table-condensed table-striped" id="artiststable"><th>Nothing to show</th></table>
-	        </div>
-	        <div class="tab-pane" id="albums">
-	            <table class="table table-hover table-condensed table-striped" id="albumstable"><th>Nothing to show</th></table>
-	        </div>
-	    </div>
+	<div style="height:35%;width:100%;">
+		<div id="tabsholder">
+			<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+		        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
+		        <li><a href="#artists" data-toggle="tab">Artists</a></li>
+		        <li><a href="#albums" data-toggle="tab">Albums</a></li>
+		        <li><a href="#countries" data-toggle="tab">Countries</a></li>
+		    </ul>
+		    <div id="my-tab-content" class="tab-content" style="overflow:auto;max-height:95%;">
+		        <div class="tab-pane active" id="genres">
+		            <table class="table table-hover table-condensed table-striped compact" id="genrestable"></table>
+		        </div>
+		        <div class="tab-pane" id="artists">
+		            <table class="table table-hover table-condensed table-striped compact" id="artiststable"><th>Nothing to show</th></table>
+		        </div>
+		        <div class="tab-pane" id="albums">
+		            <table class="table table-hover table-condensed table-striped compact" id="albumstable"><th>Nothing to show</th></table>
+		        </div>
+		        <div class="tab-pane" id="countries">
+		            <table class="table table-hover table-condensed table-striped compact" id="countriestable"><th>Nothing to show</th></table>
+		        </div>
+		    </div>
+		</div>
 	</div>
 	<hr>
 	<div id="tracksholder" style="overflow:auto;height:58%;">
 		<b>Playlist</b>
-		<table id="trackstable" class="table table-hover table-condensed table-striped">
+		<table id="trackstable" class="table table-hover table-striped compact">
 			<th>Nothing to show</th>
 		</table>
 	</div>
@@ -60,12 +78,10 @@
         var currentDuration = "";
         var currentTimestamp = 0;
 
+        var currentTime = 0;
+
 	    $(document).ready(function(){
-	        $("#jplayer").jPlayer({
-	            ready: function () {},
-	            swfPath: "/js",
-	            supplied: "mp3"
-	        });
+	        $("#jplayer").jPlayer();
 
 	        $('#volume').slider({
 	            formater: function(value) {
@@ -74,8 +90,11 @@
 	            }
 	        });
 
+            initSeekSlider();
+
 	        $("#tabs").tab();
 	        fillGenres();
+	        fillCountries();
 
 	        $(function() {
 				$.extend($.fn.disableTextSelect = function() {
@@ -108,8 +127,33 @@
                 scrobble(currentArtist, currentTrack, currentTimestamp);
                 playNext();
             });
+            player.bind($.jPlayer.event.timeupdate, function(event) {
+                changeSeekValue($('#jplayer').data('jPlayer').status.currentTime, $('#jplayer').data('jPlayer').status.duration)
+            });
 
             updateTrackInfo(id);
+        }
+
+        function initSeekSlider() {
+            $('#seek').slider({
+                min: 0,
+                max: 100,
+                value: 0
+            }).on('slideStop', function(event) {
+                $("#jplayer").jPlayer("playHead", event.value);
+                console.log('Seek: ' + event.value);
+            });
+            $('#seek').css('width', '98%');
+        }
+
+        function changeSeekValue(current, total) {
+            var now = parseInt((current/total) * 100, 10);
+            if (now != currentTime) {
+                currentTime = now;
+                $('#seek').remove();
+                $('#seekdiv').after('<div style="padding-right:20px;padding-left:20px;width:100%;">                <input type="text" id="seek" data-slider-min="0" data-slider-max="100" data-slider-value="' + parseInt((current/total) * 100, 10) + '" data-slider-tooltip="hide" data-slider-id="seek" style="width:100%;">            </div>');
+                initSeekSlider();
+            }
         }
 
         function updateTrackInfo(id) {
@@ -133,6 +177,7 @@
         }
 
 	    function updateNowPlaying(artist, track) {
+	    	$("#currentartist").text(artist);
             $.getJSON("/updatenowplaying?artist=" + artist + "&track=" + track + "&userid=" + @request.session.get("userid").getOrElse("-1").toLong, function(json) {
                 return false;
             });
@@ -155,7 +200,7 @@
                     tbl_row.append(tbl_cell);
                     var id = this.id;
                     setClickHandlers(tbl_row, function() {
-                        fillArtists(id);
+                        fillArtists("/artists?genreid=" + id);
                     }, function() {
                         $.getJSON("/tracks?genreid=" + id, function(json) {
                             console.log("/tracks?genreid=" + id);
@@ -168,9 +213,33 @@
             });
         }
 
-        function fillArtists(genreid) {
-            console.log("/artists?genreid=" + genreid);
-            $.getJSON("/artists?genreid=" + genreid, function(json) {
+        function fillCountries() {
+            $.getJSON("/countries", function(json) {
+                var table = $("#countriestable");
+                table.empty();
+                highlightOnClick(table);
+                $.each(json, function() {
+                    var tbl_row = $("<tr>", {class: "loadartists", href: "#artists", id: this.id});
+                    var tbl_cell = $("<td>", {id: this.id, html: this.name});
+                    tbl_row.append(tbl_cell);
+                    var id = this.id;
+                    setClickHandlers(tbl_row, function() {
+                        fillArtists("/artists?countryid=" + id);
+                    }, function() {
+                        $.getJSON("/tracks?countryid=" + id, function(json) {
+                            console.log("/tracks?countryid=" + id);
+                            fillTracks(json);
+                        });
+                    });
+                    table.append(tbl_row);
+                })
+                return false;
+            });
+        }
+
+        function fillArtists(url) {
+            console.log(url);
+            $.getJSON(url, function(json) {
                 var table = $("#artiststable");
                 table.empty();
                 headers(table, ["Name"]);

@@ -23,6 +23,7 @@ object User {
     get[String]("password") map {
       case name ~ pwd => User(name, pwd)
     })
+
   val requestForm = Form(
     mapping("name" -> nonEmptyText,
       "password" -> nonEmptyText)(User.apply)(User.unapply))
@@ -38,5 +39,12 @@ object User {
     DB.withConnection { implicit connection =>
       SQL("SELECT name, password FROM users WHERE id = {id}").on('id -> id).single(User.parser)
     }
+  }
+
+  def isValidInvitation(invitation: String): Boolean = {
+    val count = DB.withConnection { implicit connection =>
+      SQL("SELECT count(*) AS CNT FROM invites WHERE invite = {invite} AND used = '0'").on('invite -> invitation).single(get[Long]("cnt"))
+    }
+    count > 0
   }
 }

@@ -4,13 +4,15 @@
 @import helper.twitterBootstrap._
 
 @main("Login") {
-    <div class="row">
-        <div class="span12">
-            @form(routes.AuthenticationController.login, args = 'id -> "userform", '_class -> "form-horizontal") {
-                @inputText(userForm("name"))
-                @inputPassword(userForm("password"))
-                <input type="submit" value="Log in" class="btn">
-            }
-        </div>
+	<div class="center">
+		<div class="row">
+		    <div class="span12">
+		        @form(routes.AuthenticationController.login, args = 'id -> "userform", '_class -> "form-horizontal") {
+		            @inputText(userForm("name"), '_showConstraints -> false)
+		            @inputPassword(userForm("password"), '_showConstraints -> false)
+		            <input type="submit" value="Log in" class="btn">
+		        }
+		    </div>
+		</div>
     </div>
 }

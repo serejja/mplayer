@@ -1,0 +1,14 @@
+@(editorBody: play.api.templates.Html)
+
+<div id="edit" class="modal hide">
+    <div class="modal-body">
+    	@editorBody
+    </div>
+    <div class="modal-footer">
+    	<div class="pull-left">
+    		<button id="delete" href="#" class="btn btn-danger">Delete</button>
+    	</div>
+    	<button id="save" href="#" class="btn btn-success">OK</button>
+    	<button id="cancel" href="#" class="btn btn-primary">Cancel</button>
+    </div>
+</div>

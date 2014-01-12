@@ -1,0 +1,38 @@
+@(invitation: String, msg: String = "")
+
+@import helper._
+@import helper.twitterBootstrap._
+@import views.html.tags._
+
+@main("Register") {
+	<div class="center">
+		@helper.form(action = routes.RegistrationController.register(invitation), 'enctype -> "multipart/form-data") {
+			<fieldset>
+				<input type="hidden" id="invitation" name="invitation" value="@invitation">
+				<div class="controls controlw-row">
+					<span style="color:#FF0000">@msg</span>
+				</div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Username", "username", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Password", "password", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Confirm password", "confirmpassword", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Last.fm account (optional)", "lasfm", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Email", "email", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	<div class="clearfix span3">
+			    		<input type="submit" value="Register">
+			    	</div>
+			    </div>
+		    </fieldset>
+		}
+	</div>
+}

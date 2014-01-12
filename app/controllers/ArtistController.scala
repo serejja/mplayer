@@ -8,8 +8,23 @@ object ArtistController extends AbstractController {
     Ok(Artists.byId(id).toJson)
   }
 
-  def artists(genreid: Long) = withAuth { implicit request =>
+  def artists(genreid: Long, countryid: Long) = withAuth { implicit request =>
     import models.Artists._
-    Ok(Json.toJson(Artists.byGenre(genreid)))
+    if (genreid != -1) {
+      Ok(Json.toJson(Artists.byGenre(genreid)))
+    } else {
+      Ok(Json.toJson(Artists.byCountry(countryid)))
+    }
+  }
+
+  def update = withAuth { implicit request =>
+    Artists.requestForm.bindFromRequest.fold(
+      errors => {
+        Ok(errors.errorsAsJson)
+      },
+      artist => {
+        Artists.update(artist)
+        Ok("Save artist OK")
+      })
   }
 }
