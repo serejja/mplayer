@@ -14,7 +14,7 @@ import models.Artist
 import models.Album
 
 object Release {
-	def fromFile(file: File, genre: String, artist: String, album: String, year: String, format: String) {
+	def fromFile(file: File, genre: String, artistid: Option[String], artistname: Option[String], countryid: Option[String], album: String, year: String, format: String) {
 	  if (isZip(file)) {
 	    unzip(file)
 	  } else if (isRar(file)) {
@@ -23,12 +23,15 @@ object Release {
 	    Log.error("File " + file.getName + " is not a rar or zip archive")
 	  }
 	  val releaseTempLocation = file.getAbsolutePath.substring(0, file.getAbsolutePath.length - 4)
-	  processFolder(releaseTempLocation, genre, artist, album, year, format)
+	  processFolder(releaseTempLocation, genre, artistid, artistname, countryid, album, year, format)
 	}
 	
-	def processFolder(releaseTempLocation: String, genreid: String, artistName: String, albumName: String, year: String, format: String) {
-	  val destinationReleaseLocation = createReleaseFolders(genreid, artistName, albumName, year)
-	  val artist = Artists.getOrNew(genreid.toLong, artistName)
+	def processFolder(releaseTempLocation: String, genreid: String, artistid: Option[String], artistname: Option[String], countryid: Option[String], albumName: String, year: String, format: String) {
+	  val artist = countryid match {
+	    case Some(id) => Artists.create(genreid.toLong, artistname.get, id.toLong) 
+	    case None => Artists.byId(artistid.get.toLong)
+	  }
+	  val destinationReleaseLocation = createReleaseFolders(genreid, artist.name, albumName, year)
 	  val album = Albums.getOrNew(artist, albumName, year.toLong, format)
 	  val folder = new File(releaseTempLocation)
 	  recursiveAddFiles(folder.listFiles, destinationReleaseLocation, album)
