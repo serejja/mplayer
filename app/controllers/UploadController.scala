@@ -30,6 +30,7 @@ object UploadController extends AbstractController {
         Release.fromFile(file, getParam(PARAM_GENRE), getParam(PARAM_ARTIST), getParam(PARAM_ALBUM), getParam(PARAM_YEAR), getParam(PARAM_FORMAT))
         Log.debug("Uploaded " + release.filename)
         release.ref.clean
+        file.delete()
         Ok("File uploaded")
       } else {
         Log.warn("Not all parameters supplied for release " + release.filename)

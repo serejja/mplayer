@@ -32,9 +32,11 @@ object FileUtils {
     randomAccessFile.readFully(buffer)
     for (i <- 0 until bytes.length) {
       if (buffer(i) != bytes(i)) {
+        randomAccessFile.close
         return false
       }
     }
+    randomAccessFile.close
     true
   }
 
@@ -66,6 +68,8 @@ object FileUtils {
         } finally {
           dest.flush
           dest.close
+          fos.flush
+          fos.close
           is.close
         }
       }

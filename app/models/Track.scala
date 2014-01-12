@@ -74,6 +74,15 @@ object Tracks {
         " ORDER BY t.id").on('genreid -> genreid).as(Tracks.parser *)
     }
   }
+  
+  def byCountry(countryid: Long): List[Track] = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT " + columns +
+        from +
+        " WHERE c.id = {countryid} " +
+        " ORDER BY g.name, a.name, al.issue_year, t.id").on('countryid -> countryid).as(Tracks.parser *)
+    }
+  }
 
   def byId(id: Long): Track = {
     val tracks = DB.withConnection { implicit connection =>

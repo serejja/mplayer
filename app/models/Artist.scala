@@ -8,8 +8,10 @@ import play.api.libs.json._
 import service.Release
 import java.io.File
 import models.Genres.writer
+import play.api.data._
+import play.api.data.Forms._
 
-case class Artist(id: Long, name: String, genre: Genre) {
+case class Artist(id: Long, name: String, genre: Genre, country: Country) {
   def toJson: JsValue = {
     Artists.writer.writes(this)
   }
@@ -18,21 +20,31 @@ case class Artist(id: Long, name: String, genre: Genre) {
 object Artists {
   val columns = " a.id AS artist$id, a.name AS artist$name, c.id AS country$id, c.name AS country$name," + Genres.columns
   private val from = " FROM artists a INNER JOIN genres g ON a.genre_id = g.id LEFT JOIN countries c ON a.country_id = c.id "
-  
+
   val parser = (
     get[Long]("artist$id") ~
     get[String]("artist$name") ~
-    Genres.parser map {
-      case id ~ name ~ genre => Artist(id, name, genre)
+    Genres.parser ~
+    Countries.parser map {
+      case id ~ name ~ genre ~ country => Artist(id, name, genre, country)
     })
 
   implicit val writer = new Writes[Artist] {
     def writes(c: Artist): JsValue = {
       Json.obj("id" -> c.id,
         "name" -> c.name,
-        "genre" -> c.genre.toJson)
+        "genre" -> c.genre.toJson,
+        "country" -> c.country.toJson)
     }
   }
+
+  val requestForm = Form(
+    mapping("id" -> longNumber,
+      "name" -> nonEmptyText,
+      "genre" -> longNumber,
+      "country" -> longNumber)(
+        (id, name, genre, country) => Artist(id, name, Genres.byId(genre), Countries.byId(country)))(
+          (artist: Artist) => Some(artist.id, artist.name, artist.genre.id, artist.country.id)))
 
   def byId(artistid: Long): Artist = {
     val artists = DB.withConnection { implicit connection =>
@@ -42,7 +54,7 @@ object Artists {
     }
     artists.head
   }
-  
+
   def byGenre(genreid: Long): List[Artist] = {
     DB.withConnection { implicit connection =>
       System.out.println("SELECT " + columns +
@@ -53,6 +65,15 @@ object Artists {
         from +
         " WHERE a.genre_id = {genreid} " +
         " ORDER BY a.name").on('genreid -> genreid).as(Artists.parser *)
+    }
+  }
+
+  def byCountry(countryid: Long): List[Artist] = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT " + columns +
+        from +
+        " WHERE c.id = {countryid} " +
+        " ORDER BY a.name").on('countryid -> countryid).as(Artists.parser *)
     }
   }
 
@@ -81,6 +102,14 @@ object Artists {
       return byId(id)
     }
     artists.head
+  }
+
+  def update(artist: Artist) {
+    DB.withConnection { implicit connection =>
+      SQL("UPDATE artists " +
+        " SET name = {name}, genre_id = {genre}, country_id = {country} " +
+        " WHERE id = {id}").on('id -> artist.id, 'name -> artist.name, 'genre -> artist.genre.id, 'country -> artist.country.id).execute
+    }
   }
 
   def delete(artistid: Long) {
