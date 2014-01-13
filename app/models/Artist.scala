@@ -29,6 +29,12 @@ object Artists {
       case id ~ name ~ genre ~ country => Artist(id, name, genre, country)
     })
 
+  val optionParser = (
+    get[Long]("artist$id") ~
+    get[String]("artist$name") map {
+      case id ~ name => (id.toString -> name)
+    })
+
   implicit val writer = new Writes[Artist] {
     def writes(c: Artist): JsValue = {
       Json.obj("id" -> c.id,
@@ -46,6 +52,13 @@ object Artists {
         (id, name, genre, country) => Artist(id, name, Genres.byId(genre), Countries.byId(country)))(
           (artist: Artist) => Some(artist.id, artist.name, artist.genre.id, artist.country.id)))
 
+  def comboOptions: Seq[(String, String)] = {
+    DB.withConnection { implicit connection =>
+      SQL("SELECT id AS artist$id, name AS artist$name" +
+        " FROM artists").as(optionParser *)
+    }
+  }
+
   def byId(artistid: Long): Artist = {
     val artists = DB.withConnection { implicit connection =>
       SQL("SELECT " + columns +
@@ -57,10 +70,6 @@ object Artists {
 
   def byGenre(genreid: Long): List[Artist] = {
     DB.withConnection { implicit connection =>
-      System.out.println("SELECT " + columns +
-        from +
-        " WHERE a.genre_id = {genreid} " +
-        " ORDER BY a.name");
       SQL("SELECT " + columns +
         from +
         " WHERE a.genre_id = {genreid} " +
@@ -87,21 +96,20 @@ object Artists {
     }
   }
 
-  def getOrNew(genreid: Long, name: String): Artist = {
-    var artists = DB.withConnection { implicit connection =>
+  def byName(name: String): Artist = {
+    DB.withConnection { implicit connection =>
       SQL("SELECT " + columns +
         from +
-        " WHERE a.genre_id = {genreid} AND lower(a.name) = {name}").on('genreid -> genreid, 'name -> name.toLowerCase).as(Artists.parser *)
+        " WHERE lower(a.name) = {name}").on('name -> name.toLowerCase).as(Artists.parser *).head
     }
-    if (artists.isEmpty) {
-      val id = DB.withConnection { implicit connection =>
-        SQL("INSERT INTO artists (name, genre_id) " +
-          " VALUES ({name}, {genreid}) " +
-          " RETURNING id").on('genreid -> genreid, 'name -> name).single(get[Long]("id"))
-      }
-      return byId(id)
+  }
+
+  def create(genreid: Long, name: String, countryid: Long): Artist = {
+    DB.withConnection { implicit c =>
+      byId(SQL("INSERT INTO artists (name, genre_id, country_id) " +
+        " VALUES ({name}, {genreid}, {countryid}) " +
+        " RETURNING id").on('genreid -> genreid, 'name -> name, 'countryid -> countryid).single(get[Long]("id")))
     }
-    artists.head
   }
 
   def update(artist: Artist) {

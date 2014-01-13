@@ -1,4 +1,4 @@
-@(genres: Seq[(String, String)], formats: Seq[(String, String)])
+@(genres: Seq[(String, String)], artists: Seq[(String, String)], formats: Seq[(String, String)], countries: Seq[(String, String)])
 
 @import helper._
 @import helper.twitterBootstrap._
@@ -6,31 +6,66 @@
 
 @main("Upload a release") {
 	<a href="@routes.Application.index">Back</a><br>
-	@helper.form(action = routes.UploadController.upload, 'enctype -> "multipart/form-data") {
-		<fieldset>
-			<div class="controls controls-row">
-		    	@file("Archive file", "release", "span3")
-		    </div>
-		    <div class="controls controls-row">
-				@dropdown_combo("Genre", "genre", genres, "span3", null)
-			</div>
-			<div class="controls controls-row">
-				@input_text_2("Artist", "artist", "span3")
-		    </div>
-		    <div class="controls controls-row">
-		    	@input_text_2("Album", "album", "span3")
-		    </div>
-		    <div class="controls controls-row">
-		    	@input_text_2("Year", "year", "span3")
-		    </div>
-		    <div class="controls controls-row">
-		    	@dropdown_combo("Format", "format", formats, "span3", null)
-		    </div>
-		    <div class="controls controls-row">
-		    	<div class="clearfix span3">
-		    		<input type="submit" value="Upload">
-		    	</div>
-		    </div>
-	    </fieldset>
-	}
+	<div class="row">
+		<div class="span3">
+		<legend>Existing artist</legend>
+		@helper.form(action = routes.UploadController.upload, 'enctype -> "multipart/form-data") {
+			<fieldset>
+				<div class="controls controls-row">
+			    	@file("Archive file", "release", "span3")
+			    </div>
+				<div class="controls controls-row">
+					@dropdown_combo("Artist", "artistid", artists, "span3", null)
+			    </div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Album", "album", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Year", "year", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@dropdown_combo("Format", "format", formats, "span3", null)
+			    </div>
+			    <div class="controls controls-row">
+			    	<div class="clearfix span3">
+			    		<input type="submit" value="Upload">
+			    	</div>
+			    </div>
+		    </fieldset>
+		}
+		</div>
+		<div class="span3">
+		<legend>New artist</legend>
+		@helper.form(action = routes.UploadController.upload, 'enctype -> "multipart/form-data") {
+			<fieldset>
+				<div class="controls controls-row">
+			    	@file("Archive file", "release", "span3")
+			    </div>
+			    <div class="controls controls-row">
+					@dropdown_combo("Genre", "genre", genres, "span3", null)
+				</div>
+				<div class="controls controls-row">
+					@input_text_2("Artist", "artistname", "span3")
+			    </div>
+			    <div class="controls controls-row">
+					@dropdown_combo("Country", "country", countries, "span3", null)
+				</div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Album", "album", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@input_text_2("Year", "year", "span3")
+			    </div>
+			    <div class="controls controls-row">
+			    	@dropdown_combo("Format", "format", formats, "span3", null)
+			    </div>
+			    <div class="controls controls-row">
+			    	<div class="clearfix span3">
+			    		<input type="submit" value="Upload">
+			    	</div>
+			    </div>
+		    </fieldset>
+		}
+		</div>
+	</div>
 } 
