@@ -11,6 +11,10 @@ GET 	/logout						controllers.AuthenticationController.logout
 GET 	/settings					controllers.UserController.settingsPage(id: Long)
 POST	/settings 					controllers.UserController.saveSettings
 
+#registration
+GET 	/register					controllers.RegistrationController.registerPage(invitation)
+POST 	/register 					controllers.RegistrationController.register(invitation)
+
 #upload
 GET 	/upload						controllers.UploadController.uploadPage
 POST	/upload 					controllers.UploadController.upload
@@ -41,13 +45,16 @@ GET 	/genres						controllers.GenreController.genres
 GET 	/genres/:id 				controllers.GenreController.genre(id: Long)
 PUT 	/genres 	 				controllers.GenreController.update
 
-GET 	/artists					controllers.ArtistController.artists(genreid: Long)
+GET 	/artists					controllers.ArtistController.artists(genreid: Long ?= -1, countryid: Long ?= -1)
 GET 	/artists/:id 				controllers.ArtistController.artist(id: Long)
+PUT 	/artists 	 				controllers.ArtistController.update
 
 GET 	/albums						controllers.Application.albums(artistid: Long)
 
-GET 	/tracks						controllers.Application.tracks(albumid: Long ?= -1, artistid: Long ?= -1, genreid: Long ?= -1)
+GET 	/tracks						controllers.Application.tracks(albumid: Long ?= -1, artistid: Long ?= -1, genreid: Long ?= -1, countryid: Long ?= -1)
 GET 	/trackinfo					controllers.Application.trackinfo(id: Long)
+
+GET 	/countries 					controllers.CountryController.countries
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
