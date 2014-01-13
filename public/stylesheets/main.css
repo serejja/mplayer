@@ -1,8 +1,33 @@
-html, body {
-    padding: 0;
+* {
     margin: 0;
-    font-family: Helvetica, Arial;
-    color: #3A4244;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+* html body {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    position: relative;
+}
+
+#divbody {
+    padding-bottom: 10px;
+}
+
+#foot {
+    position: absolute;
+    bottom: 0px;
+    height: 10px;
+}
+
+#trackstable td, #genrestable td, #artiststable td, #albumstable td, #countriestable td {
+    padding: 0;
 }
 
 header {

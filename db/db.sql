@@ -371,3 +371,37 @@ alter column email set not null;
 
 alter table tracks
 add column track_no int;
+
+delete from tracks;
+delete from albums;
+delete from artists;
+delete from genres;
+
+alter sequence genres_id_seq
+restart with 1;
+
+insert into genres
+(name)
+values
+('Black Metal'),
+('Death Metal'),
+('Doom Metal'),
+('Thrash Metal'),
+('Melodic Death Metal'),
+('Gothic Metal'),
+('Heavy Metal'),
+('Power Metal'),
+('Symphonic Metal'),
+('Folk Metal'),
+('Speed Metal'),
+('Viking Metal'),
+('Dark Metal'),
+('Avant-Garde Metal'),
+('Alternative Metal'),
+('Metalcore'),
+('Deathcore'),
+('Grindcore'),
+('Hardcore'),
+('Post-rock'),
+('Progressive Rock'),
+('Ambient');

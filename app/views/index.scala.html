@@ -4,14 +4,18 @@
 @import helper.twitterBootstrap._
 
 @main("mplayer") {
-	<style>
-        #trackstable td, #genrestable td, #artiststable td, #albumstable td, #countriestable td {
-            padding: 0;
-        }
-    </style>
 	<div class="pull-right" style="padding-right:5px;">
-		<small>Logged in as <a href="@routes.UserController.settingsPage(request.session.get("userid").getOrElse("-1").toLong)">@request.session.get("username")</a></small>
-		<small><a href="/logout">Logout</a></small>
+        <div class="btn-group">
+            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">@request.session.get("username")  <span class="caret"></span></button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li><a href="@routes.UserController.settingsPage(request.session.get("userid").getOrElse("-1").toLong)">Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="@routes.UploadController.uploadPage">Upload a release</a></li>
+                <li><a href="@routes.ManageController.genresPage">Manage music</a></li>
+                <li class="divider"></li>
+                <li><a href="@routes.AuthenticationController.logout">Logout</a></li>
+            </ul>
+        </div>
 	</div>
 	<div id="jplayer"></div>
 	<div id="jp_container_1" style="width:100%;">
@@ -27,15 +31,15 @@
     			<input type="text" class="span2" id="volume" data-slider-min="0" data-slider-max="100" data-slider-value="50" data-slider-tooltip="hide" data-slider-id="volume">
     		</div>
         </div>
-        <div class="controls controls-row" id="seekdiv" style="width:100%;">
-            <div style="padding-right:20px;padding-left:20px;width:100%;">
-                <input type="text" id="seek" data-slider-min="0" data-slider-max="100" data-slider-value="0" data-slider-tooltip="hide" data-slider-id="seek" style="width:100%;">
+        <div class="controls controls-row" id="seekdiv" style="width:99%;">
+            <div class="progress active">
+                <div class="progress-bar progress-bar-success active" id="seek"></div>
             </div>
         </div>
 	</div>
 	<br><br>
 
-	<div style="height:35%;width:100%;">
+	<div style="overflow: auto; max-height: 350px; height: 350px;">
 		<div id="tabsholder">
 			<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 		        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
@@ -43,7 +47,7 @@
 		        <li><a href="#albums" data-toggle="tab">Albums</a></li>
 		        <li><a href="#countries" data-toggle="tab">Countries</a></li>
 		    </ul>
-		    <div id="my-tab-content" class="tab-content" style="overflow:auto;max-height:95%;">
+		    <div id="my-tab-content" class="tab-content" style="overflow:auto;">
 		        <div class="tab-pane active" id="genres">
 		            <table class="table table-hover table-condensed table-striped compact" id="genrestable"></table>
 		        </div>
@@ -60,7 +64,7 @@
 		</div>
 	</div>
 	<hr>
-	<div id="tracksholder" style="overflow:auto;height:58%;">
+	<div id="tracksholder" style="overflow: auto; max-height: 400px; height: 400px;">
 		<b>Playlist</b>
 		<table id="trackstable" class="table table-hover table-striped compact">
 			<th>Nothing to show</th>
@@ -90,7 +94,7 @@
 	            }
 	        });
 
-            initSeekSlider();
+            // initSeekSlider();
 
 	        $("#tabs").tab();
 	        fillGenres();
@@ -128,33 +132,30 @@
                 playNext();
             });
             player.bind($.jPlayer.event.timeupdate, function(event) {
-                changeSeekValue($('#jplayer').data('jPlayer').status.currentTime, $('#jplayer').data('jPlayer').status.duration)
+                // changeSeekValue($('#jplayer').data('jPlayer').status.currentTime, $('#jplayer').data('jPlayer').status.duration)
             });
 
             updateTrackInfo(id);
         }
 
-        function initSeekSlider() {
-            $('#seek').slider({
-                min: 0,
-                max: 100,
-                value: 0
-            }).on('slideStop', function(event) {
-                $("#jplayer").jPlayer("playHead", event.value);
-                console.log('Seek: ' + event.value);
-            });
-            $('#seek').css('width', '98%');
-        }
+        // function initSeekSlider() {
+        //     $('#seek').on('slideStop', function(event) {
+        //         $("#jplayer").jPlayer("playHead", parseInt(event.value * 0.95));
+        //         console.log('Seek: ' + parseInt(event.value * 0.95));
+        //     });
+        //     //$('#seek').css('width', '99%');
+        // }
 
-        function changeSeekValue(current, total) {
-            var now = parseInt((current/total) * 100, 10);
-            if (now != currentTime) {
-                currentTime = now;
-                $('#seek').remove();
-                $('#seekdiv').after('<div style="padding-right:20px;padding-left:20px;width:100%;">                <input type="text" id="seek" data-slider-min="0" data-slider-max="100" data-slider-value="' + parseInt((current/total) * 100, 10) + '" data-slider-tooltip="hide" data-slider-id="seek" style="width:100%;">            </div>');
-                initSeekSlider();
-            }
-        }
+        // function changeSeekValue(current, total) {
+        //     var now = parseInt((current/total) * 100, 10);
+        //     if (now != currentTime) {
+        //         currentTime = now;
+        //         $('#seek').attr('aria-valuenow', parseInt((current/total) * 100, 10));
+        //         // $('#seek').remove();
+        //         // $('#seekdiv').after('<div style="padding-right:20px;padding-left:20px;width:100%;">                <input type="text" id="seek" data-slider-min="0" data-slider-max="100" data-slider-value="' + parseInt((current/total) * 100, 10) + '" data-slider-tooltip="hide" data-slider-id="seek" style="width:100%;">            </div>');
+        //         // initSeekSlider();
+        //     }
+        // }
 
         function updateTrackInfo(id) {
             $.getJSON("/trackinfo?id=" + id, function(json) {
