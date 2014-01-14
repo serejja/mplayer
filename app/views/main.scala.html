@@ -19,68 +19,66 @@
         <script src="@routes.Assets.at("javascripts/bootstrap-slider.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/bootbox.min.js")" type="text/javascript"></script>
     </head>
-    <body>
-        <div id="divbody" style="padding-left:5px;padding-top:5px;padding-bottom:5px;padding-right:5px;height:100%;">
-            @content
+    <body style="overflow:hidden;">
+        @content
 
-            <script type="text/javascript">
-                var DELAY = 200,
-                clicks = 0,
-                timer = null;
+        <script type="text/javascript">
+            var DELAY = 200,
+            clicks = 0,
+            timer = null;
 
-                $(document).ready(function(){
-                    $(function() {
-                        $.extend($.fn.disableTextSelect = function() {
-                            return this.each(function() {
-                                $(this).mousedown(function() { return false; });
-                            });
+            $(document).ready(function(){
+                $(function() {
+                    $.extend($.fn.disableTextSelect = function() {
+                        return this.each(function() {
+                            $(this).mousedown(function() { return false; });
                         });
                     });
                 });
+            });
 
-                function playNext() {
-                    var nextrow = $("#trackstable > tbody > tr.success").next("tr");
-                    console.log(nextrow);
-                    if (nextrow.attr("id") == undefined) {
-                        nextrow = $("#trackstable > tbody > tr").first().next();
-                    }
-                    nextrow.click();
+            function playNext() {
+                var nextrow = $("#trackstable > tbody > tr.success").next("tr");
+                console.log(nextrow);
+                if (nextrow.attr("id") == undefined) {
+                    nextrow = $("#trackstable > tbody > tr").first().next();
                 }
+                nextrow.click();
+            }
 
-                function headers(table, headers) {
-                    var tbl_header_row = $("<tr>", {});
-                    $.each(headers, function() {
-                        var tbl_header_cell = $("<th>", {html: this});
-                        tbl_header_row.append(tbl_header_cell);
-                    });
-                    table.append(tbl_header_row);
-                }
+            function headers(table, headers) {
+                var tbl_header_row = $("<tr>", {});
+                $.each(headers, function() {
+                    var tbl_header_cell = $("<th>", {html: this});
+                    tbl_header_row.append(tbl_header_cell);
+                });
+                table.append(tbl_header_row);
+            }
 
-                function highlightOnClick(table) {
-                    table.on("click", "tbody tr", function(event) {
-                        $(this).addClass("success").siblings().removeClass("success");
-                    });
-                }
+            function highlightOnClick(table) {
+                table.on("click", "tbody tr", function(event) {
+                    $(this).addClass("success").siblings().removeClass("success");
+                });
+            }
 
-                function setClickHandlers(row, singleClick, doubleClick) {
-                    row.on("click", function(e){
-                        clicks++;
-                        if(clicks === 1) {
-                            timer = setTimeout(function() {
-                                singleClick();
-                                clicks = 0;
-                            }, DELAY);
-                        } else {
-                            e.preventDefault();
-                            clearTimeout(timer);
-                            doubleClick();
+            function setClickHandlers(row, singleClick, doubleClick) {
+                row.on("click", function(e){
+                    clicks++;
+                    if(clicks === 1) {
+                        timer = setTimeout(function() {
+                            singleClick();
                             clicks = 0;
-                        }
-                    }).on("dblclick", function(e) {
+                        }, DELAY);
+                    } else {
                         e.preventDefault();
-                    }).disableTextSelect();
-                }
-            </script>
-        </div>
+                        clearTimeout(timer);
+                        doubleClick();
+                        clicks = 0;
+                    }
+                }).on("dblclick", function(e) {
+                    e.preventDefault();
+                }).disableTextSelect();
+            }
+        </script>
     </body>
 </html>

@@ -39,32 +39,30 @@
 	</div>
 	<br><br>
 
-	<div style="overflow: auto; max-height: 350px; height: 350px;">
-		<div id="tabsholder">
-			<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-		        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
-		        <li><a href="#artists" data-toggle="tab">Artists</a></li>
-		        <li><a href="#albums" data-toggle="tab">Albums</a></li>
-		        <li><a href="#countries" data-toggle="tab">Countries</a></li>
-		    </ul>
-		    <div id="my-tab-content" class="tab-content" style="overflow:auto;">
-		        <div class="tab-pane active" id="genres">
-		            <table class="table table-hover table-condensed table-striped compact" id="genrestable"></table>
-		        </div>
-		        <div class="tab-pane" id="artists">
-		            <table class="table table-hover table-condensed table-striped compact" id="artiststable"><th>Nothing to show</th></table>
-		        </div>
-		        <div class="tab-pane" id="albums">
-		            <table class="table table-hover table-condensed table-striped compact" id="albumstable"><th>Nothing to show</th></table>
-		        </div>
-		        <div class="tab-pane" id="countries">
-		            <table class="table table-hover table-condensed table-striped compact" id="countriestable"><th>Nothing to show</th></table>
-		        </div>
-		    </div>
-		</div>
+	<div style="position:absolute;top:70px;left:0;height:300px;width:100%;">
+		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+	        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
+	        <li><a href="#artists" data-toggle="tab">Artists</a></li>
+	        <li><a href="#albums" data-toggle="tab">Albums</a></li>
+	        <li><a href="#countries" data-toggle="tab">Countries</a></li>
+	    </ul>
+	    <div id="my-tab-content" class="tab-content" style="overflow:auto;position:absolute;top:20;left:0;height:300px;width:100%;">
+	        <div class="tab-pane active" id="genres">
+	            <table class="table table-hover table-condensed table-striped compact" id="genrestable"></table>
+	        </div>
+	        <div class="tab-pane" id="artists">
+	            <table class="table table-hover table-condensed table-striped compact" id="artiststable"><th>Nothing to show</th></table>
+	        </div>
+	        <div class="tab-pane" id="albums">
+	            <table class="table table-hover table-condensed table-striped compact" id="albumstable"><th>Nothing to show</th></table>
+	        </div>
+	        <div class="tab-pane" id="countries">
+	            <table class="table table-hover table-condensed table-striped compact" id="countriestable"><th>Nothing to show</th></table>
+	        </div>
+	    </div>
 	</div>
 	<hr>
-	<div id="tracksholder" style="overflow: auto; max-height: 400px; height: 400px;">
+	<div id="tracksholder" style="overflow:auto;position:absolute;top:440px;left:0;right:0;bottom:0px;">
 		<b>Playlist</b>
 		<table id="trackstable" class="table table-hover table-striped compact">
 			<th>Nothing to show</th>
