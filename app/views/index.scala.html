@@ -4,8 +4,8 @@
 @import helper.twitterBootstrap._
 
 @main("mplayer") {
-	<div class="pull-right" style="padding-right:5px;">
-        <div class="btn-group">
+	<div class="pull-right">
+        <div class="btn-group" style="padding-right:5px;padding-top:5px;padding-left:5px;">
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">@request.session.get("username")  <span class="caret"></span></button>
             <ul class="dropdown-menu pull-right" role="menu">
                 <li><a href="@routes.UserController.settingsPage(request.session.get("userid").getOrElse("-1").toLong)">Settings</a></li>
@@ -20,14 +20,14 @@
 	<div id="jplayer"></div>
 	<div id="jp_container_1" style="width:100%;">
         <div class="controls controls-row">
-    		<div class="pull-left" style="padding-right:5px;">
+    		<div class="pull-left" style="padding-right:5px;padding-top:5px;padding-left:5px;">
     			<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
     			<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
     		</div>
-    		<div class="pull-left" style="padding-right:5px;">
+    		<div class="pull-left" style="padding-right:5px;padding-top:5px;padding-left:5px;">
     			<p id="nowplaying"></p>
     		</div>
-    		<div class="pull-right" style="padding-right:20px;">
+    		<div class="pull-right" style="padding-right:20px;padding-top:5px;">
     			<input type="text" class="span2" id="volume" data-slider-min="0" data-slider-max="100" data-slider-value="50" data-slider-tooltip="hide" data-slider-id="volume">
     		</div>
         </div>
@@ -39,14 +39,14 @@
 	</div>
 	<br><br>
 
-	<div style="position:absolute;top:70px;left:0;height:300px;width:100%;">
+	<div style="position:absolute;top:70px;left:5px;right:5px;height:300px;width:100%;">
 		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 	        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
 	        <li><a href="#artists" data-toggle="tab">Artists</a></li>
 	        <li><a href="#albums" data-toggle="tab">Albums</a></li>
 	        <li><a href="#countries" data-toggle="tab">Countries</a></li>
 	    </ul>
-	    <div id="my-tab-content" class="tab-content" style="overflow:auto;position:absolute;top:20;left:0;height:300px;width:100%;">
+	    <div id="my-tab-content" class="tab-content" style="overflow:auto;position:absolute;top:20;left:0;right:5px;height:300px;">
 	        <div class="tab-pane active" id="genres">
 	            <table class="table table-hover table-condensed table-striped compact" id="genrestable"></table>
 	        </div>
@@ -62,7 +62,7 @@
 	    </div>
 	</div>
 	<hr>
-	<div id="tracksholder" style="overflow:auto;position:absolute;top:440px;left:0;right:0;bottom:0px;">
+	<div id="tracksholder" style="overflow:auto;position:absolute;top:440px;left:5px;right:5px;bottom:0px;">
 		<b>Playlist</b>
 		<table id="trackstable" class="table table-hover table-striped compact">
 			<th>Nothing to show</th>
