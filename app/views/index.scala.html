@@ -6,7 +6,7 @@
 @main("mplayer") {
 	<div class="pull-right">
         <div class="btn-group" style="padding-right:5px;padding-top:5px;padding-left:5px;">
-            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">@request.session.get("username")  <span class="caret"></span></button>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">@request.session.get("username")  <span class="caret"></span></button>
             <ul class="dropdown-menu pull-right" role="menu">
                 <li><a href="@routes.UserController.settingsPage(request.session.get("userid").getOrElse("-1").toLong)">Settings</a></li>
                 <li class="divider"></li>
@@ -27,13 +27,8 @@
     		<div class="pull-left" style="padding-right:5px;padding-top:5px;padding-left:5px;">
     			<p id="nowplaying"></p>
     		</div>
-    		<div class="pull-right" style="padding-right:20px;padding-top:5px;">
-    			<input type="text" class="span2" id="volume" data-slider-min="0" data-slider-max="100" data-slider-value="50" data-slider-tooltip="hide" data-slider-id="volume">
-    		</div>
-        </div>
-        <div class="controls controls-row" id="seekdiv" style="width:99%;">
-            <div class="progress active">
-                <div class="progress-bar progress-bar-success active" id="seek"></div>
+            <div class="pull-right" style="padding-right:5px;padding-top:16px;padding-left:5px;width:200px;">
+                <div id="volume"></div>
             </div>
         </div>
 	</div>
@@ -48,28 +43,29 @@
 	    </ul>
 	    <div id="my-tab-content" class="tab-content" style="overflow:auto;position:absolute;top:20;left:0;right:5px;height:300px;">
 	        <div class="tab-pane active" id="genres">
-	            <table class="table table-hover table-condensed table-striped compact" id="genrestable"></table>
+	            <table class="table table-hover table-condensed table-striped" id="genrestable"></table>
 	        </div>
 	        <div class="tab-pane" id="artists">
-	            <table class="table table-hover table-condensed table-striped compact" id="artiststable"><th>Nothing to show</th></table>
+	            <table class="table table-hover table-condensed table-striped" id="artiststable"><th>Nothing to show</th></table>
 	        </div>
 	        <div class="tab-pane" id="albums">
-	            <table class="table table-hover table-condensed table-striped compact" id="albumstable"><th>Nothing to show</th></table>
+	            <table class="table table-hover table-condensed table-striped" id="albumstable"><th>Nothing to show</th></table>
 	        </div>
 	        <div class="tab-pane" id="countries">
-	            <table class="table table-hover table-condensed table-striped compact" id="countriestable"><th>Nothing to show</th></table>
+	            <table class="table table-hover table-condensed table-striped" id="countriestable"><th>Nothing to show</th></table>
 	        </div>
 	    </div>
 	</div>
-	<hr>
+	
 	<div id="tracksholder" style="overflow:auto;position:absolute;top:440px;left:5px;right:5px;bottom:0px;">
 		<b>Playlist</b>
-		<table id="trackstable" class="table table-hover table-striped compact">
+		<table id="trackstable" class="table table-hover table-striped">
 			<th>Nothing to show</th>
 		</table>
 	</div>
 
 	<script type="text/javascript">
+        var tracks = [];
 		var currentId = 0;
         var currentGenre = "";
         var currentArtist = "";
@@ -85,12 +81,15 @@
 	    $(document).ready(function(){
 	        $("#jplayer").jPlayer();
 
-	        $('#volume').slider({
-	            formater: function(value) {
-	                $("#jplayer").jPlayer("volume", value/100);
-	                return 'Volume: ' + value;
-	            }
-	        });
+            $('#volume').slider({
+              min: 0,
+              max: 100,
+              range: "min",
+              value: 50,
+              slide: function( event, ui ) {
+                $("#jplayer").jPlayer("volume", ui.value/100);
+              }
+            });
 
             // initSeekSlider();
 
@@ -135,25 +134,6 @@
 
             updateTrackInfo(id);
         }
-
-        // function initSeekSlider() {
-        //     $('#seek').on('slideStop', function(event) {
-        //         $("#jplayer").jPlayer("playHead", parseInt(event.value * 0.95));
-        //         console.log('Seek: ' + parseInt(event.value * 0.95));
-        //     });
-        //     //$('#seek').css('width', '99%');
-        // }
-
-        // function changeSeekValue(current, total) {
-        //     var now = parseInt((current/total) * 100, 10);
-        //     if (now != currentTime) {
-        //         currentTime = now;
-        //         $('#seek').attr('aria-valuenow', parseInt((current/total) * 100, 10));
-        //         // $('#seek').remove();
-        //         // $('#seekdiv').after('<div style="padding-right:20px;padding-left:20px;width:100%;">                <input type="text" id="seek" data-slider-min="0" data-slider-max="100" data-slider-value="' + parseInt((current/total) * 100, 10) + '" data-slider-tooltip="hide" data-slider-id="seek" style="width:100%;">            </div>');
-        //         // initSeekSlider();
-        //     }
-        // }
 
         function updateTrackInfo(id) {
             $.getJSON("/trackinfo?id=" + id, function(json) {
@@ -300,7 +280,9 @@
             headers(table, ["#", "Title", "Duration", "Artist", "Country", "Album", "Year", "Genre"]);
             highlightOnClick(table);
             var count = 1;
+
             $.each(json, function() {
+                tracks.push(this.id);
                 var tbl_row = $("<tr>", {class: "play", href: "#", id: this.id});
                 var tbl_cell_no = $("<td>", {id: this.id, html: count++});
                 var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
