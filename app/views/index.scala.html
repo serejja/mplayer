@@ -6,7 +6,7 @@
 @main("mplayer") {
 	<div class="pull-right">
         <div class="btn-group" style="padding-right:5px;padding-top:5px;padding-left:5px;">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">@request.session.get("username")  <span class="caret"></span></button>
+            <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">@request.session.get("username")  <span class="caret"></span></button>
             <ul class="dropdown-menu pull-right" role="menu">
                 <li><a href="@routes.UserController.settingsPage(request.session.get("userid").getOrElse("-1").toLong)">Settings</a></li>
                 <li class="divider"></li>
@@ -27,7 +27,13 @@
     		<div class="pull-left" style="padding-right:5px;padding-top:6px;padding-left:5px;">
     			<p id="nowplaying"></p>
     		</div>
-            <div class="pull-right" style="padding-right:5px;padding-top:16px;padding-left:5px;width:200px;">
+            <div class="pull-right" style="padding-right:5px;padding-top:5px;padding-left:5px;width:30px;">
+                <button id="shuffle" type="button" class="btn btn-success btn-xs" style="font-weight:bold;width:25px;">···</button>
+            </div>
+            <div class="pull-right" style="padding-right:5px;padding-top:5px;padding-left:5px;width:30px;">
+                <button id="repeat" type="button" class="btn btn-success btn-xs" style="font-weight:bold;width:25px;">&gt;</button>
+            </div>
+            <div class="pull-right" style="padding-right:5px;padding-top:11px;padding-left:5px;width:200px;">
                 <div id="volume"></div>
             </div>
         </div>
@@ -87,6 +93,8 @@
 
 	<script type="text/javascript">
 	    $(document).ready(function(){
+            var shuffle = false;
+            var repeat = false;
             userid = @request.session.get("userid").getOrElse("-1").toLong;
 
 	        $("#jplayer").jPlayer();
@@ -109,6 +117,20 @@
                 stop: function(event, ui) {
                     $('#jplayer').jPlayer("playHead", ui.value);
                 }
+            });
+
+            $('#shuffle').click(function(event) {
+                if (shuffle) {
+                    $(this).html('···');
+                } else $(this).html('·.•');
+                shuffle = !shuffle;
+            });
+
+            $('#repeat').click(function(event) {
+                if (repeat) {
+                    $(this).html('&gt;');
+                } else $(this).html('&#8635;');
+                repeat = !repeat;
             });
 
 	        $("#tabs").tab();
