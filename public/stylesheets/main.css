@@ -16,7 +16,7 @@ body {
     position: relative;
 }
 
-#trackstable td, #genrestable td, #artiststable td, #albumstable td, #countriestable td {
+#trackstable td, #genrestable td, #artiststable td, #albumstable td, #countriestable, #recentuploadstable td {
     padding: 0;
 }
 

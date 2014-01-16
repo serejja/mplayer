@@ -57,6 +57,7 @@
 	        <li><a href="#artists" data-toggle="tab">Artists</a></li>
 	        <li><a href="#albums" data-toggle="tab">Albums</a></li>
 	        <li><a href="#countries" data-toggle="tab">Countries</a></li>
+            <li><a href="#recent_uploads" data-toggle="tab">Recent Uploads</a></li>
 	    </ul>
 	    <div id="my-tab-content" class="tab-content" style="overflow:auto;position:absolute;top:20;left:0;right:5px;height:200px;">
 	        <div class="tab-pane active" id="genres">
@@ -69,8 +70,11 @@
 	            <table class="table table-hover table-condensed" id="albumstable"><th>Nothing to show</th></table>
 	        </div>
 	        <div class="tab-pane" id="countries">
-	            <table class="table table-hover table-condensed" id="countriestable"><th>Nothing to show</th></table>
-	        </div>
+                <table class="table table-hover table-condensed" id="countriestable"><th>Nothing to show</th></table>
+            </div>
+            <div class="tab-pane" id="recent_uploads">
+                <table class="table table-hover table-condensed" id="recentuploadstable"><th>Nothing to show</th></table>
+            </div>
 	    </div>
 	</div>
 	
@@ -110,6 +114,7 @@
 	        $("#tabs").tab();
 	        fillGenres();
 	        fillCountries();
+            fillRecentUploads();
             enableSearching();
 
 	        $(function() {

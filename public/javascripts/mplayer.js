@@ -246,6 +246,37 @@ function fillTracks(json) {
     return false;
 }
 
+function fillRecentUploads() {
+	$.getJSON("/recentuploads", function(json) {
+        var table = $("#recentuploadstable");
+        table.empty();
+        headers(table, ["Artist", "Album", "Year", "Format"]);
+        highlightOnClick(table);
+        $.each(json, function() {
+            var tbl_row = $("<tr>", {href: "#", class: "loadtracks", id: this.id});
+            var tbl_cell_artist = $('<td>', {id: this.id, html: this.artist.name});
+            var tbl_cell_album = $("<td>", {id: this.id, html: this.name});
+            var tbl_cell_year = $("<td>", {id: this.id, html: this.year});
+            var tbl_cell_format = $("<td>", {id: this.id, html: this.format});
+            tbl_row.append(tbl_cell_artist);
+            tbl_row.append(tbl_cell_album);
+            tbl_row.append(tbl_cell_year);
+            tbl_row.append(tbl_cell_format);
+            var id = this.id;
+            setClickHandlers(tbl_row, function() {
+                $.getJSON("/tracks?albumid=" + id, function(json) {
+                    console.log("/tracks?albumid=" + id);
+                    fillTracks(json);
+                });
+            }, function() {
+                alert("Double click");
+            });
+            table.append(tbl_row);
+        });
+        return false;
+    });
+}
+
 function searchArtists(searchtext) {
     fillArtists("/searchartists?text=" + searchtext);
 }

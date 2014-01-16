@@ -51,6 +51,7 @@ PUT 	/artists 	 				controllers.ArtistController.update
 GET		/searchartists				controllers.ArtistController.searchArtists(text)
 
 GET 	/albums						controllers.Application.albums(artistid: Long)
+GET		/recentuploads				controllers.Application.recentUploads
 
 GET 	/tracks						controllers.Application.tracks(albumid: Long ?= -1, artistid: Long ?= -1, genreid: Long ?= -1, countryid: Long ?= -1)
 GET 	/trackinfo					controllers.Application.trackinfo(id: Long)
