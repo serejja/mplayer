@@ -33,8 +33,17 @@
         </div>
 	</div>
 	<br><br>
+    <div id="seek-controls">
+        <div class="controls controls-row" style="padding-left:15px;padding-right:15px;height:23px;">
+            <div class="pull-left"><p id="now_time">0:00</p></div>
+            <div class="pull-right"><p id="total_time">0:00</p></div>
+        </div>
+        <div class="controls controls-row" style="padding-left:25px;padding-right:25px;">
+            <div id="seek"></div>
+        </div>
+    </div>
 
-	<div style="position:absolute;top:70px;left:5px;right:5px;height:200px;width:100%;">
+	<div style="position:absolute;top:90px;left:5px;right:5px;height:200px;width:100%;">
         <div name="search" class="pull-right" style="width:300px;padding-right:10px;">
             <div class="input-group">
                 <input type="text" class="form-control" id="searchtext">
@@ -75,7 +84,7 @@
 	<script type="text/javascript">
 	    $(document).ready(function(){
             userid = @request.session.get("userid").getOrElse("-1").toLong;
-            
+
 	        $("#jplayer").jPlayer();
 
             $('#volume').slider({
@@ -86,6 +95,16 @@
               slide: function( event, ui ) {
                 $("#jplayer").jPlayer("volume", ui.value/100);
               }
+            });
+
+            $('#seek').slider({
+                min: 0,
+                max: 100,
+                range: "min",
+                value: 0,
+                stop: function(event, ui) {
+                    $('#jplayer').jPlayer("playHead", ui.value);
+                }
             });
 
 	        $("#tabs").tab();

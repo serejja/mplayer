@@ -48,15 +48,23 @@ function updatePlayer(id){
         playNext();
     });
     player.bind($.jPlayer.event.timeupdate, function(event) {
-        // changeSeekValue($('#jplayer').data('jPlayer').status.currentTime, $('#jplayer').data('jPlayer').status.duration)
+    	onTimeUpdate();
     });
 
     updateTrackInfo(id);
 }
 
+function onTimeUpdate() {
+	var time = $('#jplayer').data('jPlayer').status.currentTime;
+    	var duration = $('#jplayer').data('jPlayer').status.duration;
+    	$('#now_time').text(parseInt(time/60) + ":" + withLeadingZeros(parseInt(time % 60), 2));
+    	$('#seek').slider('value', parseInt((time/duration) * 100));
+}
+
 function updateTrackInfo(id) {
     $.getJSON("/trackinfo?id=" + id, function(json) {
         var nowplaying = $("#nowplaying");
+        var totalTime = $('#total_time');
         currentId = id;
         currentGenre = json.album.artist.genre.name;
         currentArtist = json.album.artist.name;
@@ -69,6 +77,7 @@ function updateTrackInfo(id) {
         currentDuration = json.duration;
         currentTimestamp = Math.round(+new Date()/1000);
         nowplaying.text(currentArtist + " - " + currentTrack + " (" + currentDuration + ")");
+        totalTime.text(currentDuration);
         updateNowPlaying(currentArtist, currentTrack);
         return false;
     });
@@ -245,7 +254,7 @@ function playNext() {
     var nextID = tracks.indexOf(parseInt(currentId)) + 1;
     if (tracks[nextID] === undefined) nextID = 0;
     console.log(nextID);
-    var nextrow = $('#trackstable > tbody > tr[id=' + tracks[nextID] + ']');
+    var nextrow = $('#trackstable > tbody > tr > td> a[id=' + tracks[nextID] + ']');
     console.log(nextrow);
     nextrow.click();
 }
@@ -282,4 +291,10 @@ function setClickHandlers(row, singleClick, doubleClick) {
     }).on("dblclick", function(e) {
         e.preventDefault();
     }).disableTextSelect();
+}
+
+function withLeadingZeros(num, size) {
+	var s = num + "";
+	while (s.length < size) s = "0" + s;
+	return s;
 }
