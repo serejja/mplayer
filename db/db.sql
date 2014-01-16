@@ -411,3 +411,12 @@ update countries set name = 'USA' where id = 4;
 insert into settings (name, description, value)
 values
 ('special_characters', 'Special characters to avoid in artist names', '[!?:\\/]');
+
+insert into genres (name) values ('Progressive Metal');
+
+--update artists set genre_id = 23
+--where genre_id = 11;
+
+--update tracks
+--set location = regexp_replace(location, 'Speed', 'Progressive')
+--where album_id = 20

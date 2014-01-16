@@ -1,4 +1,6 @@
 var userid = 0;
+var shuffle = false;
+var repeat = false;
 
 var tracks = [];
 var currentId = 0;
@@ -282,8 +284,15 @@ function searchArtists(searchtext) {
 }
 
 function playNext() {
-    var nextID = tracks.indexOf(parseInt(currentId)) + 1;
-    if (tracks[nextID] === undefined) nextID = 0;
+    var nextID = 0;
+    if (repeat) {
+        nextID = tracks.indexOf(parseInt(currentId));
+    } else if (shuffle) {
+        nextID = randomInt(tracks.length);
+    } else {
+        nextID = tracks.indexOf(parseInt(currentId)) + 1;
+        if (tracks[nextID] === undefined) nextID = 0;
+    }
     console.log(nextID);
     var nextrow = $('#trackstable > tbody > tr > td> a[id=' + tracks[nextID] + ']');
     console.log(nextrow);
@@ -328,4 +337,8 @@ function withLeadingZeros(num, size) {
 	var s = num + "";
 	while (s.length < size) s = "0" + s;
 	return s;
+}
+
+function randomInt(maxValue) {
+    return Math.floor(Math.random() * maxValue);
 }
