@@ -28,13 +28,13 @@
     			<p id="nowplaying"></p>
     		</div>
             <div class="pull-right" style="padding-right:5px;padding-top:5px;padding-left:5px;width:30px;">
-                <button id="shuffle" type="button" class="btn btn-success btn-xs" style="font-weight:bold;width:25px;">···</button>
+                <button id="shuffle" type="button" class="btn btn-success btn-xs" style="font-weight:bold;width:25px;" title="Shuffle: off">···</button>
             </div>
             <div class="pull-right" style="padding-right:5px;padding-top:5px;padding-left:5px;width:30px;">
-                <button id="repeat" type="button" class="btn btn-success btn-xs" style="font-weight:bold;width:25px;">&gt;</button>
+                <button id="repeat" type="button" class="btn btn-success btn-xs" style="font-weight:bold;width:25px;" title="Repeat: off">&gt;</button>
             </div>
             <div class="pull-right" style="padding-right:5px;padding-top:11px;padding-left:5px;width:200px;">
-                <div id="volume"></div>
+                <div id="volume" title="Volume: 50%"></div>
             </div>
         </div>
 	</div>
@@ -97,12 +97,14 @@
 
 	        $("#jplayer").jPlayer();
 
+            $('#volume').tooltip({track:true});
             $('#volume').slider({
               min: 0,
               max: 100,
               range: "min",
               value: 50,
               slide: function( event, ui ) {
+                $(this).tooltip( "option", "content", "Volume: " + ui.value + "%");
                 $("#jplayer").jPlayer("volume", ui.value/100);
               }
             });
@@ -117,17 +119,29 @@
                 }
             });
 
-            $('#shuffle').click(function(event) {
+            var shuffleButton = $('#shuffle');
+            shuffleButton.tooltip();
+            shuffleButton.click(function(event) {
                 if (shuffle) {
                     $(this).html('···');
-                } else $(this).html('·.•');
+                    $(this).tooltip( "option", "content", "Shuffle: off");
+                } else { 
+                    $(this).html('·.•');
+                    $(this).tooltip( "option", "content", "Shuffle: on");
+                }
                 shuffle = !shuffle;
             });
 
-            $('#repeat').click(function(event) {
+            var repeatButton = $('#repeat');
+            repeatButton.tooltip();
+            repeatButton.click(function(event) {
                 if (repeat) {
                     $(this).html('&gt;');
-                } else $(this).html('&#8635;');
+                    $(this).tooltip( "option", "content", "Repeat: off");
+                } else {
+                    $(this).html('&#8635;');
+                    $(this).tooltip( "option", "content", "Repeat: on");
+                }
                 repeat = !repeat;
             });
 
