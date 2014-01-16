@@ -55,7 +55,7 @@ object Artists {
   def comboOptions: Seq[(String, String)] = {
     DB.withConnection { implicit connection =>
       SQL("SELECT id AS artist$id, name AS artist$name" +
-        " FROM artists").as(optionParser *)
+        " FROM artists").as(optionParser *).sortBy(_._2)
     }
   }
 
@@ -128,6 +128,14 @@ object Artists {
     DB.withConnection { implicit connection =>
       SQL("DELETE FROM artists " +
         " WHERE id = {id} ").on('id -> artistid).execute
+    }
+  }
+  
+  def search(text: String): List[Artist] = {
+    DB.withConnection { implicit c =>
+      SQL("SELECT " + columns + 
+          from + 
+          " WHERE a.name ilike {text}").on('text -> s"%${text.replaceAll("[();]", "")}%").as(Artists.parser *)
     }
   }
 }

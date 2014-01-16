@@ -405,3 +405,7 @@ values
 ('Post-rock'),
 ('Progressive Rock'),
 ('Ambient');
+
+insert into settings (name, description, value)
+values
+('special_characters', 'Special characters to avoid in artist names', '[!?:\\/]');

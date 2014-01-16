@@ -39,7 +39,7 @@ object Release {
 	}
 	
 	def createReleaseFolders(genre: Long, artist: String, album: String, year: String): String = {
-	  val releasePath = s"${Settings.repositoryLocation}${Genres.byId(genre).name}/${artist}/${year} - ${album}/"
+	  val releasePath = s"${Settings.repositoryLocation}${Genres.byId(genre).name}/${cleanString(artist)}/${year} - ${cleanString(album)}/"
 	  new File(releasePath).mkdirs
 	  releasePath
 	}
@@ -72,4 +72,6 @@ object Release {
 	def genreLocation(genre: Genre): String = {
 	  s"${Settings.repositoryLocation}${genre.name}/"
 	}
+	
+	private def cleanString(toClean: String): String = toClean.replaceAll(Settings.specialCharacters, "")
 }

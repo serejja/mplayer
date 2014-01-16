@@ -28,7 +28,7 @@ object Countries {
   def comboOptions: Seq[(String, String)] = {
     DB.withConnection { implicit connection =>
       SQL("SELECT id AS country$id, name AS country$name" +
-        " FROM countries").as(optionParser *)
+        " FROM countries").as(optionParser *).sortBy(_._2)
     }
   }
 
