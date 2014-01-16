@@ -16,17 +16,7 @@ body {
     position: relative;
 }
 
-#divbody {
-    padding-bottom: 10px;
-}
-
-#foot {
-    position: absolute;
-    bottom: 0px;
-    height: 10px;
-}
-
-#trackstable td, #genrestable td, #artiststable td, #albumstable td, #countriestable td {
+#trackstable td, #genrestable td, #artiststable td, #albumstable td, #countriestable, #recentuploadstable td {
     padding: 0;
 }
 

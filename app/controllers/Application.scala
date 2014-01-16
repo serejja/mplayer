@@ -26,6 +26,11 @@ object Application extends AbstractController {
     import models.Albums._
     Ok(Json.toJson(Albums.byArtist(artistid)))
   }
+  
+  def recentUploads = withAuth { implicit request =>
+    import models.Albums._
+    Ok(Json.toJson(Albums.recent))
+  }
 
   def tracks(albumid: Long, artistid: Long, genreid: Long, countryid: Long) = withAuth { implicit request =>
     import models.Tracks._

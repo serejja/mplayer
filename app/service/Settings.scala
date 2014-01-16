@@ -16,6 +16,7 @@ object Settings {
   private val LAST_FM_API_KEY = "lastfm_api_key"
   private val LAST_FM_SECRET_KEY = "lastfm_secret"
   private val LAST_FM_API_URL = "lastfm_api_url"
+  private val SPECIAL_CHARACTERS = "special_characters"
 
   private lazy val parser = {
     get[String]("name") ~
@@ -84,5 +85,9 @@ object Settings {
   
   def lastfmApiUrl: String = { 
     getByName(LAST_FM_API_URL, "http://ws.audioscrobbler.com/2.0/")
+  }
+  
+  def specialCharacters: String = {
+    getByName(SPECIAL_CHARACTERS, "[!?:\\\\/]")
   }
 }

@@ -62,7 +62,7 @@ object Tracks {
       SQL("SELECT " + columns + 
         from +
         " WHERE a.id = {artistid} " +
-        " ORDER BY al.issue_year, t.track_no").on('artistid -> artistid).as(Tracks.parser *)
+        " ORDER BY al.issue_year, al.name, t.track_no").on('artistid -> artistid).as(Tracks.parser *)
     }
   }
   
@@ -71,7 +71,7 @@ object Tracks {
       SQL("SELECT " + columns +
         from +
         " WHERE g.id = {genreid} " +
-        " ORDER BY a.id, al.issue_year, t.track_no").on('genreid -> genreid).as(Tracks.parser *)
+        " ORDER BY a.id, al.issue_year, al.name, t.track_no").on('genreid -> genreid).as(Tracks.parser *)
     }
   }
   
@@ -80,7 +80,7 @@ object Tracks {
       SQL("SELECT " + columns +
         from +
         " WHERE c.id = {countryid} " +
-        " ORDER BY g.name, a.name, al.issue_year, t.track_no").on('countryid -> countryid).as(Tracks.parser *)
+        " ORDER BY g.name, a.name, al.issue_year, al.name, t.track_no").on('countryid -> countryid).as(Tracks.parser *)
     }
   }
 

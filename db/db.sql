@@ -407,3 +407,7 @@ values
 ('Ambient');
 
 update countries set name = 'USA' where id = 4;
+
+insert into settings (name, description, value)
+values
+('special_characters', 'Special characters to avoid in artist names', '[!?:\\/]');

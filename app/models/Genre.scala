@@ -91,7 +91,7 @@ object Genres {
   def comboOptions: Seq[(String, String)] = {
     DB.withConnection { implicit connection =>
       SQL("SELECT id AS genre$id, name AS genre$name" +
-        " FROM genres").as(optionParser *)
+        " FROM genres").as(optionParser *).sortBy(_._2)
     }
   }
 }
