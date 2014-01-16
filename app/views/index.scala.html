@@ -21,10 +21,10 @@
 	<div id="jp_container_1" style="width:100%;">
         <div class="controls controls-row">
     		<div class="pull-left" style="padding-right:5px;padding-top:5px;padding-left:5px;">
-    			<a href="#" class="btn btn-success btn-mini jp-play">&#9658;</a>
-    			<a href="#" class="btn btn-success btn-mini jp-pause">| |</a>
+    			<a href="#" class="btn btn-success btn-xs jp-play">&#9658;</a>
+    			<a href="#" class="btn btn-success btn-xs jp-pause">| |</a>
     		</div>
-    		<div class="pull-left" style="padding-right:5px;padding-top:5px;padding-left:5px;">
+    		<div class="pull-left" style="padding-right:5px;padding-top:6px;padding-left:5px;">
     			<p id="nowplaying"></p>
     		</div>
             <div class="pull-right" style="padding-right:5px;padding-top:16px;padding-left:5px;width:200px;">
@@ -34,32 +34,32 @@
 	</div>
 	<br><br>
 
-	<div style="position:absolute;top:70px;left:5px;right:5px;height:300px;width:100%;">
+	<div style="position:absolute;top:70px;left:5px;right:5px;height:200px;width:100%;">
 		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 	        <li class="active"><a href="#genres" data-toggle="tab">Genres</a></li>
 	        <li><a href="#artists" data-toggle="tab">Artists</a></li>
 	        <li><a href="#albums" data-toggle="tab">Albums</a></li>
 	        <li><a href="#countries" data-toggle="tab">Countries</a></li>
 	    </ul>
-	    <div id="my-tab-content" class="tab-content" style="overflow:auto;position:absolute;top:20;left:0;right:5px;height:300px;">
+	    <div id="my-tab-content" class="tab-content" style="overflow:auto;position:absolute;top:20;left:0;right:5px;height:200px;">
 	        <div class="tab-pane active" id="genres">
-	            <table class="table table-hover table-condensed table-striped" id="genrestable"></table>
+	            <table class="table table-hover table-condensed" id="genrestable"></table>
 	        </div>
 	        <div class="tab-pane" id="artists">
-	            <table class="table table-hover table-condensed table-striped" id="artiststable"><th>Nothing to show</th></table>
+	            <table class="table table-hover table-condensed" id="artiststable"><th>Nothing to show</th></table>
 	        </div>
 	        <div class="tab-pane" id="albums">
-	            <table class="table table-hover table-condensed table-striped" id="albumstable"><th>Nothing to show</th></table>
+	            <table class="table table-hover table-condensed" id="albumstable"><th>Nothing to show</th></table>
 	        </div>
 	        <div class="tab-pane" id="countries">
-	            <table class="table table-hover table-condensed table-striped" id="countriestable"><th>Nothing to show</th></table>
+	            <table class="table table-hover table-condensed" id="countriestable"><th>Nothing to show</th></table>
 	        </div>
 	    </div>
 	</div>
 	
-	<div id="tracksholder" style="overflow:auto;position:absolute;top:440px;left:5px;right:5px;bottom:0px;">
+	<div id="tracksholder" style="overflow:auto;position:absolute;top:340px;left:5px;right:5px;bottom:0px;">
 		<b>Playlist</b>
-		<table id="trackstable" class="table table-hover table-striped">
+		<table id="trackstable" class="table table-hover">
 			<th>Nothing to show</th>
 		</table>
 	</div>
@@ -77,6 +77,8 @@
         var currentTimestamp = 0;
 
         var currentTime = 0;
+
+        var playButton = '<a href="#" class="btn btn-success btn-xs play">&#9658;</a>';
 
 	    $(document).ready(function(){
 	        $("#jplayer").jPlayer();
@@ -277,26 +279,30 @@
         function fillTracks(json) {
             var table = $("#trackstable");
             table.empty();
-            headers(table, ["#", "Title", "Duration", "Artist", "Country", "Album", "Year", "Genre"]);
+            headers(table, [" ", "#", "Title", "Duration", "Artist", "Country", "Album", "Year", "Genre"]);
             highlightOnClick(table);
             var count = 1;
 
             $.each(json, function() {
                 tracks.push(this.id);
-                var tbl_row = $("<tr>", {class: "play", href: "#", id: this.id});
-                var tbl_cell_no = $("<td>", {id: this.id, html: count++});
-                var tbl_cell_name = $("<td>", {id: this.id, html: this.name});
-                var tbl_cell_duration = $("<td>", {id: this.id, html: this.duration});
-                var tbl_cell_artist = $("<td>", {id: this.id, html: this.album.artist.name});
+                var tbl_row = $("<tr>", {href: "#", id: this.id});
+                
+                var play_button = $('<a>', {id: this.id, href: '#', class: 'btn btn-success btn-xs play', html: '&#9658;'});
+                var tbl_cell_play = $("<td>", {html: play_button});
+                var tbl_cell_no = $("<td>", {html: count++});
+                var tbl_cell_name = $("<td>", {html: this.name});
+                var tbl_cell_duration = $("<td>", {html: this.duration});
+                var tbl_cell_artist = $("<td>", {html: this.album.artist.name});
                 var country = this.album.artist.country;
                 if (country != undefined) {
-                    var tbl_cell_country = $("<td>", {id: this.id, html: this.album.artist.country.name});
+                    var tbl_cell_country = $("<td>", {html: this.album.artist.country.name});
                 } else {
-                    var tbl_cell_country = $("<td>", {id: this.id, html: "-"});
+                    var tbl_cell_country = $("<td>", {html: "-"});
                 }
-                var tbl_cell_album = $("<td>", {id: this.id, html: this.album.name});
-                var tbl_cell_year = $("<td>", {id: this.id, html: this.album.year});
-                var tbl_cell_genre = $("<td>", {id: this.id, html: this.album.artist.genre.name});
+                var tbl_cell_album = $("<td>", {html: this.album.name});
+                var tbl_cell_year = $("<td>", {html: this.album.year});
+                var tbl_cell_genre = $("<td>", {html: this.album.artist.genre.name});
+                tbl_row.append(tbl_cell_play);
                 tbl_row.append(tbl_cell_no);
                 tbl_row.append(tbl_cell_name);
                 tbl_row.append(tbl_cell_duration);
@@ -305,7 +311,7 @@
                 tbl_row.append(tbl_cell_album);
                 tbl_row.append(tbl_cell_year);
                 tbl_row.append(tbl_cell_genre);
-                tbl_row.click(function(event) {
+                play_button.click(function(event) {
                     id = event.target.id
                     console.log("get?id=" + id)
                     updatePlayer(id)
