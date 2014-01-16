@@ -405,3 +405,5 @@ values
 ('Post-rock'),
 ('Progressive Rock'),
 ('Ambient');
+
+update countries set name = 'USA' where id = 4;
