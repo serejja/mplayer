@@ -58,9 +58,9 @@ function updatePlayer(id){
 
 function onTimeUpdate() {
 	var time = $('#jplayer').data('jPlayer').status.currentTime;
-    	var duration = $('#jplayer').data('jPlayer').status.duration;
-    	$('#now_time').text(parseInt(time/60) + ":" + withLeadingZeros(parseInt(time % 60), 2));
-    	$('#seek').slider('value', parseInt((time/duration) * 100));
+    var duration = $('#jplayer').data('jPlayer').status.duration;
+    $('#now_time').text(parseInt(time/60) + ":" + withLeadingZeros(parseInt(time % 60), 2));
+    $('#seek').slider('value', parseInt((time/duration) * 100));
 }
 
 function updateTrackInfo(id) {

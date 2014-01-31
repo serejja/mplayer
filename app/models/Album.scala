@@ -59,7 +59,7 @@ object Albums {
     DB.withConnection { implicit c =>
       SQL("SELECT " + columns +
         from +
-        " ORDER BY al.id DESC limit 15").as(Albums.parser *)
+        " ORDER BY al.id DESC limit 100").as(Albums.parser *)
     }
   }
 
