@@ -19,6 +19,16 @@ var DELAY = 200,
 clicks = 0,
 timer = null;
 
+var onTimeUpdateFunction = function(event) {
+	onTimeUpdate();
+};
+
+var onTrackEndedFunction = function(event) {
+    console.log("song ended");
+    scrobble(currentArtist, currentTrack, currentTimestamp);
+    playNext();
+};
+
 function enableSearching() {
     var searchButton = $('#searchbutton');
     searchButton.click(function(event) {
@@ -40,18 +50,13 @@ function updatePlayer(id){
     swfPath: "/js",
     supplied: "mp3",
     }); 
+    player.jPlayer('clearMedia');
     player.jPlayer("setMedia", { 
         mp3: "get?id=" + id
     }); 
     player.jPlayer("play");
-    player.bind($.jPlayer.event.ended, function(event) {
-        console.log("song ended");
-        scrobble(currentArtist, currentTrack, currentTimestamp);
-        playNext();
-    });
-    player.bind($.jPlayer.event.timeupdate, function(event) {
-    	onTimeUpdate();
-    });
+    player.bind($.jPlayer.event.ended, onTrackEndedFunction);
+    player.bind($.jPlayer.event.timeupdate, onTimeUpdateFunction);
 
     updateTrackInfo(id);
 }
