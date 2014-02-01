@@ -12,18 +12,16 @@ var currentYear = 0;
 var currentTrack = "";
 var currentDuration = "";
 var currentTimestamp = 0;
+var currentVolume = 50;
 
 var currentTime = 0;
+var playing = false;
 
 var DELAY = 200,
 clicks = 0,
 timer = null;
 
-var onTimeUpdateFunction = function(event) {
-	onTimeUpdate();
-};
-
-var onTrackEndedFunction = function(event) {
+var onTrackEndedFunction = function() {
     console.log("song ended");
     scrobble(currentArtist, currentTrack, currentTimestamp);
     playNext();
@@ -38,34 +36,29 @@ function enableSearching() {
 }
 
 function updatePlayer(id){
-    var player = $("#jplayer");
-
-    player.jPlayer({
-    ready: function () { 
-        $(this).jPlayer("setMedia", { 
-            mp3: "get?id=" + id
-        }); 
-        $(this).jPlayer("play");
-    },
-    swfPath: "/js",
-    supplied: "mp3",
-    }); 
-    player.jPlayer('clearMedia');
-    player.jPlayer("setMedia", { 
-        mp3: "get?id=" + id
-    }); 
-    player.jPlayer("play");
-    player.bind($.jPlayer.event.ended, onTrackEndedFunction);
-    player.bind($.jPlayer.event.timeupdate, onTimeUpdateFunction);
+	soundManager.stop('song');
+	soundManager.destroySound('song');
+    soundManager.setup({
+		onready: function() {
+	  		console.log('trying to play');
+	    	soundManager.createSound({
+	      		id: 'song',
+	      		url: "get?id=" + id
+	    	});
+	    	soundManager.play('song', {
+	    		onfinish: onTrackEndedFunction,
+	    		whileplaying: function() {
+	    			$('#now_time').text(parseInt(this.position/60000) + ":" + withLeadingZeros(parseInt((this.position / 1000) % 60), 2));
+	    			$('#seek').slider('value', parseInt((this.position/this.duration) * 100));
+	    		}
+	    	});
+	    	$('#btn-play').html('| |');
+	    	soundManager.setVolume('song', currentVolume);
+	    	playing = false;
+	  	}
+	});
 
     updateTrackInfo(id);
-}
-
-function onTimeUpdate() {
-	var time = $('#jplayer').data('jPlayer').status.currentTime;
-    var duration = $('#jplayer').data('jPlayer').status.duration;
-    $('#now_time').text(parseInt(time/60) + ":" + withLeadingZeros(parseInt(time % 60), 2));
-    $('#seek').slider('value', parseInt((time/duration) * 100));
 }
 
 function updateTrackInfo(id) {

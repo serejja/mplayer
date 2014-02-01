@@ -17,12 +17,10 @@
             </ul>
         </div>
 	</div>
-	<div id="jplayer"></div>
 	<div id="jp_container_1" style="width:100%;">
         <div class="controls controls-row">
     		<div class="pull-left" style="padding-right:5px;padding-top:5px;padding-left:5px;">
-    			<a href="#" class="btn btn-success btn-xs jp-play" style="width:25px">&#9658;</a>
-    			<a href="#" class="btn btn-success btn-xs jp-pause" style="width:25px">| |</a>
+    			<a href="#" id="btn-play" class="btn btn-success btn-xs" style="width:25px">&#9658;</a>
     		</div>
     		<div class="pull-left" style="padding-right:5px;padding-top:6px;padding-left:5px;">
     			<p id="nowplaying"></p>
@@ -95,7 +93,16 @@
 	    $(document).ready(function(){
             userid = @request.session.get("userid").getOrElse("-1").toLong;
 
-	        $("#jplayer").jPlayer();
+            $('#btn-play').click(function(event) {
+                if (playing) {
+                    $('#btn-play').html('| |');
+                    soundManager.play('song');
+                } else {
+                    $('#btn-play').html('&#9658;');
+                    soundManager.pause('song');
+                }
+                playing = !playing;
+            });
 
             $('#volume').tooltip({track:true});
             $('#volume').slider({
@@ -105,7 +112,8 @@
               value: 50,
               slide: function( event, ui ) {
                 $(this).tooltip( "option", "content", "Volume: " + ui.value + "%");
-                $("#jplayer").jPlayer("volume", ui.value/100);
+                currentVolume = ui.value;
+                soundManager.setVolume('song', ui.value);
               }
             });
             
@@ -115,7 +123,9 @@
                 range: "min",
                 value: 0,
                 stop: function(event, ui) {
-                    $('#jplayer').jPlayer("playHead", ui.value);
+                    var song = soundManager.getSoundById('song');
+                    soundManager.setPosition('song', song.duration / 100 * ui.value);
+                    song = null;
                 }
             });
 
