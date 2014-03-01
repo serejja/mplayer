@@ -1,0 +1,301 @@
+[0m[[33mwarn[0m] [0mThe global sbt directory is now versioned and is located at /home/serejja/.sbt/0.13.[0m
+[0m[[33mwarn[0m] [0m  You are seeing this warning because there is global configuration in /home/serejja/.sbt but not in /home/serejja/.sbt/0.13.[0m
+[0m[[33mwarn[0m] [0m  The global sbt directory may be changed via the sbt.global.base system property.[0m
+[0m[[0minfo[0m] [0mLoading project definition from /usr/share/scalaide/workspace/mplayer/project[0m
+[0m[[0minfo[0m] [0mSet current project to mplayer (in build file:/usr/share/scalaide/workspace/mplayer/)[0m
+
+[35m--- (Running the application from SBT, auto-reloading is enabled) ---[0m
+
+20:26:24,441 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+20:26:24,441 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+20:26:24,441 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [jar:file:/usr/share/play/repository/local/com.typesafe.play/play_2.10/2.2.0/jars/play_2.10.jar!/logback.xml]
+20:26:24,454 |-INFO in ch.qos.logback.core.joran.spi.ConfigurationWatchList@3ebc4d82 - URL [jar:file:/usr/share/play/repository/local/com.typesafe.play/play_2.10/2.2.0/jars/play_2.10.jar!/logback.xml] is not of type file
+20:26:24,567 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+20:26:24,572 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+20:26:24,578 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+20:26:24,599 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+20:26:24,640 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to ERROR
+20:26:24,640 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+20:26:24,641 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+20:26:24,642 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@3c84b1fb - Registering current configuration as safe fallback point
+20:26:24,655 |-INFO in ch.qos.logback.core.joran.spi.ConfigurationWatchList@2bc0f4c7 - URL [jar:file:/usr/share/play/repository/local/com.typesafe.play/play_2.10/2.2.0/jars/play_2.10.jar!/logger.xml] is not of type file
+20:26:24,659 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+20:26:24,659 |-INFO in ch.qos.logback.core.joran.action.ConversionRuleAction - registering conversion word coloredLevel with class [play.api.Logger$ColoredLevel]
+20:26:24,660 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+20:26:24,661 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
+20:26:24,666 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+20:26:24,667 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [/usr/share/scalaide/workspace/mplayer/logs/application.log]
+20:26:24,669 |-ERROR in ch.qos.logback.core.FileAppender[FILE] - openFile(/usr/share/scalaide/workspace/mplayer/logs/application.log,true) call failed. java.io.FileNotFoundException: /usr/share/scalaide/workspace/mplayer/logs/application.log (Permission denied)
+	at java.io.FileNotFoundException: /usr/share/scalaide/workspace/mplayer/logs/application.log (Permission denied)
+	at 	at java.io.FileOutputStream.open(Native Method)
+	at 	at java.io.FileOutputStream.<init>(FileOutputStream.java:221)
+	at 	at ch.qos.logback.core.recovery.ResilientFileOutputStream.<init>(ResilientFileOutputStream.java:28)
+	at 	at ch.qos.logback.core.FileAppender.openFile(FileAppender.java:149)
+	at 	at ch.qos.logback.core.FileAppender.start(FileAppender.java:108)
+	at 	at ch.qos.logback.core.joran.action.AppenderAction.end(AppenderAction.java:96)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.callEndAction(Interpreter.java:317)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.endElement(Interpreter.java:196)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.endElement(Interpreter.java:182)
+	at 	at ch.qos.logback.core.joran.spi.EventPlayer.play(EventPlayer.java:62)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:149)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:135)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:99)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:49)
+	at 	at play.api.Logger$$anonfun$configure$3.apply(Logger.scala:252)
+	at 	at play.api.Logger$$anonfun$configure$3.apply(Logger.scala:252)
+	at 	at scala.Option.foreach(Option.scala:236)
+	at 	at play.api.Logger$.configure(Logger.scala:252)
+	at 	at play.core.server.Server$class.$init$(Server.scala:32)
+	at 	at play.core.server.NettyServer.<init>(NettyServer.scala:35)
+	at 	at play.core.server.NettyServer$$anonfun$mainDev$1.apply(NettyServer.scala:310)
+	at 	at play.core.server.NettyServer$$anonfun$mainDev$1.apply(NettyServer.scala:308)
+	at 	at play.utils.Threads$.withContextClassLoader(Threads.scala:18)
+	at 	at play.core.server.NettyServer$.mainDev(NettyServer.scala:307)
+	at 	at play.core.server.NettyServer$.mainDevHttpMode(NettyServer.scala:303)
+	at 	at play.core.server.NettyServer.mainDevHttpMode(NettyServer.scala)
+	at 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at 	at java.lang.reflect.Method.invoke(Method.java:606)
+	at 	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$1.apply(PlayRun.scala:233)
+	at 	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$1.apply(PlayRun.scala:91)
+	at 	at scala.Function7$$anonfun$tupled$1.apply(Function7.scala:35)
+	at 	at scala.Function7$$anonfun$tupled$1.apply(Function7.scala:34)
+	at 	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47)
+	at 	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:42)
+	at 	at sbt.std.Transform$$anon$4.work(System.scala:64)
+	at 	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237)
+	at 	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237)
+	at 	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:18)
+	at 	at sbt.Execute.work(Execute.scala:244)
+	at 	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237)
+	at 	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237)
+	at 	at sbt.ConcurrentRestrictions$$anon$4$$anonfun$1.apply(ConcurrentRestrictions.scala:160)
+	at 	at sbt.CompletionService$$anon$2.call(CompletionService.scala:30)
+	at 	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at 	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at 	at java.lang.Thread.run(Thread.java:744)
+20:26:24,669 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+20:26:24,669 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+20:26:24,670 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+20:26:24,672 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [play] to INFO
+20:26:24,672 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [application] to DEBUG
+20:26:24,672 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebean.config.PropertyMapLoader] to OFF
+20:26:24,672 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.core.XmlConfigLoader] to OFF
+20:26:24,672 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.lib.BackgroundThread] to OFF
+20:26:24,673 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.gargoylesoftware.htmlunit.javascript] to OFF
+20:26:24,673 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to ERROR
+20:26:24,673 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+20:26:24,673 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [FILE] to Logger[ROOT]
+20:26:24,673 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+20:26:24,673 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@46a2ca3e - Registering current configuration as safe fallback point
+
+[[37minfo[0m] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9003
+
+[32m(Server started, use Ctrl+D to stop and go back to the console...)[0m
+
+java.io.IOException: Bad file descriptor
+	at java.io.FileInputStream.read0(Native Method)
+	at java.io.FileInputStream.read(FileInputStream.java:210)
+	at jline.internal.NonBlockingInputStream.read(NonBlockingInputStream.java:248)
+	at jline.internal.InputStreamReader.read(InputStreamReader.java:261)
+	at jline.internal.InputStreamReader.read(InputStreamReader.java:198)
+	at jline.console.ConsoleReader.readCharacter(ConsoleReader.java:2038)
+	at play.PlayConsoleInteractionMode$$anonfun$waitForKey$1.play$PlayConsoleInteractionMode$$anonfun$$waitEOF$1(PlayInteractionMode.scala:36)
+	at play.PlayConsoleInteractionMode$$anonfun$waitForKey$1$$anonfun$apply$1.apply$mcV$sp(PlayInteractionMode.scala:45)
+	at play.PlayConsoleInteractionMode$$anonfun$doWithoutEcho$1.apply(PlayInteractionMode.scala:53)
+	at play.PlayConsoleInteractionMode$$anonfun$doWithoutEcho$1.apply(PlayInteractionMode.scala:49)
+	at play.PlayConsoleInteractionMode$.withConsoleReader(PlayInteractionMode.scala:31)
+	at play.PlayConsoleInteractionMode$.doWithoutEcho(PlayInteractionMode.scala:49)
+	at play.PlayConsoleInteractionMode$$anonfun$waitForKey$1.apply(PlayInteractionMode.scala:45)
+	at play.PlayConsoleInteractionMode$$anonfun$waitForKey$1.apply(PlayInteractionMode.scala:34)
+	at play.PlayConsoleInteractionMode$.withConsoleReader(PlayInteractionMode.scala:31)
+	at play.PlayConsoleInteractionMode$.waitForKey(PlayInteractionMode.scala:34)
+	at play.PlayConsoleInteractionMode$.waitForCancel(PlayInteractionMode.scala:56)
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$1.apply(PlayRun.scala:313)
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$1.apply(PlayRun.scala:91)
+	at scala.Function7$$anonfun$tupled$1.apply(Function7.scala:35)
+	at scala.Function7$$anonfun$tupled$1.apply(Function7.scala:34)
+	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) java.io.IOException: Bad file descriptor[0m
+[0m[[31merror[0m] [0mTotal time: 1 s, completed Feb 13, 2014 8:26:24 PM[0m
+[0m[[33mwarn[0m] [0mThe global sbt directory is now versioned and is located at /home/serejja/.sbt/0.13.[0m
+[0m[[33mwarn[0m] [0m  You are seeing this warning because there is global configuration in /home/serejja/.sbt but not in /home/serejja/.sbt/0.13.[0m
+[0m[[33mwarn[0m] [0m  The global sbt directory may be changed via the sbt.global.base system property.[0m
+[0m[[0minfo[0m] [0mLoading project definition from /usr/share/scalaide/workspace/mplayer/project[0m
+[0m[[0minfo[0m] [0mSet current project to mplayer (in build file:/usr/share/scalaide/workspace/mplayer/)[0m
+java.lang.RuntimeException: Invalid port argument: 9003asd
+	at scala.sys.package$.error(package.scala:27)
+	at play.PlayRun$class.play$PlayRun$$parsePort(PlayRun.scala:52)
+	at play.PlayRun$$anonfun$play$PlayRun$$filterArgs$2.apply(PlayRun.scala:69)
+	at play.PlayRun$$anonfun$play$PlayRun$$filterArgs$2.apply(PlayRun.scala:69)
+	at scala.Option.map(Option.scala:145)
+	at play.PlayRun$class.play$PlayRun$$filterArgs(PlayRun.scala:69)
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$1.apply(PlayRun.scala:97)
+	at play.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$1.apply(PlayRun.scala:91)
+	at scala.Function7$$anonfun$tupled$1.apply(Function7.scala:35)
+	at scala.Function7$$anonfun$tupled$1.apply(Function7.scala:34)
+	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) Invalid port argument: 9003asd[0m
+[0m[[31merror[0m] [0mTotal time: 0 s, completed Feb 13, 2014 8:27:00 PM[0m
+[0m[[33mwarn[0m] [0mThe global sbt directory is now versioned and is located at /home/serejja/.sbt/0.13.[0m
+[0m[[33mwarn[0m] [0m  You are seeing this warning because there is global configuration in /home/serejja/.sbt but not in /home/serejja/.sbt/0.13.[0m
+[0m[[33mwarn[0m] [0m  The global sbt directory may be changed via the sbt.global.base system property.[0m
+[0m[[0minfo[0m] [0mLoading project definition from /usr/share/scalaide/workspace/mplayer/project[0m
+[0m[[0minfo[0m] [0mSet current project to mplayer (in build file:/usr/share/scalaide/workspace/mplayer/)[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /usr/share/scalaide/workspace/mplayer/target/scala-2.10/classes...[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m     while compiling: /usr/share/scalaide/workspace/mplayer/target/scala-2.10/src_managed/main/views/html/main.template.scala[0m
+[0m[[31merror[0m] [0m        during phase: jvm[0m
+[0m[[31merror[0m] [0m     library version: version 2.10.2[0m
+[0m[[31merror[0m] [0m    compiler version: version 2.10.2[0m
+[0m[[31merror[0m] [0m  reconstructed args: -encoding utf8 -classpath /usr/share/scalaide/workspace/mplayer/target/scala-2.10/classes:/usr/share/scalaide/workspace/mplayer/lib/mp3agic-0.8.1.jar:/usr/share/scalaide/workspace/mplayer/lib/junrar-0.7.jar:/usr/share/scalaide/workspace/mplayer/lib/postgresql-9.2-1002.jdbc4.jar:/usr/share/play/repository/local/com.typesafe.play/play_2.10/2.2.0/jars/play_2.10.jar:/usr/share/play/repository/local/com.typesafe.play/sbt-link/2.2.0/jars/sbt-link.jar:/usr/share/play/repository/local/org.javassist/javassist/3.18.0-GA/bundles/javassist.jar:/usr/share/play/repository/local/com.typesafe.play/play-exceptions/2.2.0/jars/play-exceptions.jar:/usr/share/play/repository/local/com.typesafe.play/templates_2.10/2.2.0/jars/templates_2.10.jar:/usr/share/play/repository/local/com.github.scala-incubator.io/scala-io-file_2.10/0.4.2/jars/scala-io-file_2.10.jar:/usr/share/play/repository/local/com.github.scala-incubator.io/scala-io-core_2.10/0.4.2/jars/scala-io-core_2.10.jar:/usr/share/play/repository/local/com.jsuereth/scala-arm_2.10/1.3/jars/scala-arm_2.10.jar:/usr/share/play/repository/local/com.typesafe.play/play-iteratees_2.10/2.2.0/jars/play-iteratees_2.10.jar:/usr/share/play/repository/local/org.scala-stm/scala-stm_2.10/0.7/jars/scala-stm_2.10.jar:/usr/share/play/repository/local/com.typesafe/config/1.0.2/bundles/config.jar:/usr/share/play/repository/local/com.typesafe.play/play-json_2.10/2.2.0/jars/play-json_2.10.jar:/usr/share/play/repository/local/com.typesafe.play/play-functional_2.10/2.2.0/jars/play-functional_2.10.jar:/usr/share/play/repository/local/com.typesafe.play/play-datacommons_2.10/2.2.0/jars/play-datacommons_2.10.jar:/usr/share/play/repository/local/joda-time/joda-time/2.2/jars/joda-time.jar:/usr/share/play/repository/local/org.joda/joda-convert/1.3.1/jars/joda-convert.jar:/usr/share/play/repository/local/com.fasterxml.jackson.core/jackson-annotations/2.2.2/jars/jackson-annotations.jar:/usr/share/play/repository/local/com.fasterxml.jackson.core/jackson-core/2.2.2/jars/jackson-core.jar:/usr/share/play/repository/local/com.fasterxml.jackson.core/jackson-databind/2.2.2/jars/jackson-databind.jar:/usr/share/play/framework/sbt/boot/scala-2.10.2/lib/scala-reflect.jar:/usr/share/play/repository/local/io.netty/netty/3.7.0.Final/bundles/netty.jar:/usr/share/play/repository/local/com.typesafe.netty/netty-http-pipelining/1.1.2/jars/netty-http-pipelining.jar:/usr/share/play/repository/local/org.slf4j/slf4j-api/1.7.5/jars/slf4j-api.jar:/usr/share/play/repository/local/org.slf4j/jul-to-slf4j/1.7.5/jars/jul-to-slf4j.jar:/usr/share/play/repository/local/org.slf4j/jcl-over-slf4j/1.7.5/jars/jcl-over-slf4j.jar:/usr/share/play/repository/local/ch.qos.logback/logback-core/1.0.13/jars/logback-core.jar:/usr/share/play/repository/local/ch.qos.logback/logback-classic/1.0.13/jars/logback-classic.jar:/usr/share/play/repository/local/com.typesafe.akka/akka-actor_2.10/2.2.0/jars/akka-actor_2.10.jar:/usr/share/play/repository/local/com.typesafe.akka/akka-slf4j_2.10/2.2.0/bundles/akka-slf4j_2.10.jar:/usr/share/play/repository/local/org.apache.commons/commons-lang3/3.1/jars/commons-lang3.jar:/usr/share/play/repository/local/com.ning/async-http-client/1.7.18/jars/async-http-client.jar:/usr/share/play/repository/local/oauth.signpost/signpost-core/1.2.1.2/jars/signpost-core.jar:/usr/share/play/repository/local/commons-codec/commons-codec/1.3/jars/commons-codec.jar:/usr/share/play/repository/local/oauth.signpost/signpost-commonshttp4/1.2.1.2/jars/signpost-commonshttp4.jar:/usr/share/play/repository/local/org.apache.httpcomponents/httpcore/4.0.1/jars/httpcore.jar:/usr/share/play/repository/local/org.apache.httpcomponents/httpclient/4.0.1/jars/httpclient.jar:/usr/share/play/repository/local/commons-logging/commons-logging/1.1.1/jars/commons-logging.jar:/usr/share/play/repository/local/xerces/xercesImpl/2.11.0/jars/xercesImpl.jar:/usr/share/play/repository/local/xml-apis/xml-apis/1.4.01/jars/xml-apis.jar:/usr/share/play/repository/local/javax.transaction/jta/1.1/jars/jta.jar:/usr/share/play/repository/local/com.typesafe.play/play-jdbc_2.10/2.2.0/jars/play-jdbc_2.10.jar:/usr/share/play/repository/local/com.jolbox/bonecp/0.8.0-rc1/bundles/bonecp.jar:/usr/share/play/repository/local/com.google.guava/guava/14.0.1/bundles/guava.jar:/usr/share/play/repository/local/com.h2database/h2/1.3.172/jars/h2.jar:/usr/share/play/repository/local/tyrex/tyrex/1.0.1/jars/tyrex.jar:/usr/share/play/repository/local/com.typesafe.play/anorm_2.10/2.2.0/jars/anorm_2.10.jar -deprecation -bootclasspath /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/netx.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/plugin.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rhino.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jfr.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/classes:/usr/share/play/framework/sbt/boot/scala-2.10.2/lib/scala-library.jar -unchecked[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m  last tree to typer: Literal(Constant(play.api.templates.Html))[0m
+[0m[[31merror[0m] [0m              symbol: null[0m
+[0m[[31merror[0m] [0m   symbol definition: null[0m
+[0m[[31merror[0m] [0m                 tpe: Class(classOf[play.api.templates.Html])[0m
+[0m[[31merror[0m] [0m       symbol owners: [0m
+[0m[[31merror[0m] [0m      context owners: anonymous class anonfun$f$1 -> package html[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m== Enclosing template or block ==[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0mTemplate( // val <local $anonfun>: <notype>, tree.tpe=views.html.anonfun$f$1[0m
+[0m[[31merror[0m] [0m  "scala.runtime.AbstractFunction1", "scala.Serializable" // parents[0m
+[0m[[31merror[0m] [0m  ValDef([0m
+[0m[[31merror[0m] [0m    private[0m
+[0m[[31merror[0m] [0m    "_"[0m
+[0m[[31merror[0m] [0m    <tpt>[0m
+[0m[[31merror[0m] [0m    <empty>[0m
+[0m[[31merror[0m] [0m  )[0m
+[0m[[31merror[0m] [0m  // 3 statements[0m
+[0m[[31merror[0m] [0m  DefDef( // final def apply(title: String): Function1[0m
+[0m[[31merror[0m] [0m    <method> final <triedcooking>[0m
+[0m[[31merror[0m] [0m    "apply"[0m
+[0m[[31merror[0m] [0m    [][0m
+[0m[[31merror[0m] [0m    // 1 parameter list[0m
+[0m[[31merror[0m] [0m    ValDef( // title: String[0m
+[0m[[31merror[0m] [0m      <param> <triedcooking>[0m
+[0m[[31merror[0m] [0m      "title"[0m
+[0m[[31merror[0m] [0m      <tpt> // tree.tpe=String[0m
+[0m[[31merror[0m] [0m      <empty>[0m
+[0m[[31merror[0m] [0m    )[0m
+[0m[[31merror[0m] [0m    <tpt> // tree.tpe=Function1[0m
+[0m[[31merror[0m] [0m    Typed( // tree.tpe=Function1[0m
+[0m[[31merror[0m] [0m      Apply( // def <init>(arg$outer: views.html.anonfun$f$1,title$1: String): views.html.anonfun$apply$1, tree.tpe=views.html.anonfun$apply$1[0m
+[0m[[31merror[0m] [0m        new anonymous class anonfun$apply$1."<init>" // def <init>(arg$outer: views.html.anonfun$f$1,title$1: String): views.html.anonfun$apply$1, tree.tpe=(arg$outer: views.html.anonfun$f$1)views.html.anonfun$apply$1[0m
+[0m[[31merror[0m] [0m        // 2 arguments[0m
+[0m[[31merror[0m] [0m        This("$anonfun")final class anonfun$f$1 extends runtime.AbstractFunction1 with Serializable in package html, tree.tpe=views.html.anonfun$f$1[0m
+[0m[[31merror[0m] [0m        "title" // title: String, tree.tpe=String[0m
+[0m[[31merror[0m] [0m      )[0m
+[0m[[31merror[0m] [0m      <tpt> // tree.tpe=Function1[0m
+[0m[[31merror[0m] [0m    )[0m
+[0m[[31merror[0m] [0m  )[0m
+[0m[[31merror[0m] [0m  DefDef( // final def apply(v1: Object): Object[0m
+[0m[[31merror[0m] [0m    <method> final <bridge>[0m
+[0m[[31merror[0m] [0m    "apply"[0m
+[0m[[31merror[0m] [0m    [][0m
+[0m[[31merror[0m] [0m    // 1 parameter list[0m
+[0m[[31merror[0m] [0m    ValDef( // v1: Object[0m
+[0m[[31merror[0m] [0m      <param> <triedcooking>[0m
+[0m[[31merror[0m] [0m      "v1"[0m
+[0m[[31merror[0m] [0m      <tpt> // tree.tpe=Object[0m
+[0m[[31merror[0m] [0m      <empty>[0m
+[0m[[31merror[0m] [0m    )[0m
+[0m[[31merror[0m] [0m    <tpt> // tree.tpe=Object[0m
+[0m[[31merror[0m] [0m    Apply( // final def apply(title: String): Function1, tree.tpe=Function1[0m
+[0m[[31merror[0m] [0m      main$$anonfun$f$1.this."apply" // final def apply(title: String): Function1, tree.tpe=(title: String)Function1[0m
+[0m[[31merror[0m] [0m      Apply( // final def $asInstanceOf[T0 >: ? <: ?](): T0 in class Object, tree.tpe=String[0m
+[0m[[31merror[0m] [0m        TypeApply( // final def $asInstanceOf[T0 >: ? <: ?](): T0 in class Object, tree.tpe=()String[0m
+[0m[[31merror[0m] [0m          "v1"."$asInstanceOf" // final def $asInstanceOf[T0 >: ? <: ?](): T0 in class Object, tree.tpe=[T0 >: ? <: ?]()T0[0m
+[0m[[31merror[0m] [0m          <tpt> // tree.tpe=String[0m
+[0m[[31merror[0m] [0m        )[0m
+[0m[[31merror[0m] [0m        Nil[0m
+[0m[[31merror[0m] [0m      )[0m
+[0m[[31merror[0m] [0m    )[0m
+[0m[[31merror[0m] [0m  )[0m
+[0m[[31merror[0m] [0m  DefDef( // def <init>(): views.html.anonfun$f$1[0m
+[0m[[31merror[0m] [0m    <method> <triedcooking>[0m
+[0m[[31merror[0m] [0m    "<init>"[0m
+[0m[[31merror[0m] [0m    [][0m
+[0m[[31merror[0m] [0m    List(Nil)[0m
+[0m[[31merror[0m] [0m    <tpt> // tree.tpe=views.html.anonfun$f$1[0m
+[0m[[31merror[0m] [0m    Block( // tree.tpe=Unit[0m
+[0m[[31merror[0m] [0m      Apply( // def <init>(): scala.runtime.AbstractFunction1 in class AbstractFunction1, tree.tpe=scala.runtime.AbstractFunction1[0m
+[0m[[31merror[0m] [0m        main$$anonfun$f$1.super."<init>" // def <init>(): scala.runtime.AbstractFunction1 in class AbstractFunction1, tree.tpe=()scala.runtime.AbstractFunction1[0m
+[0m[[31merror[0m] [0m        Nil[0m
+[0m[[31merror[0m] [0m      )[0m
+[0m[[31merror[0m] [0m      ()[0m
+[0m[[31merror[0m] [0m    )[0m
+[0m[[31merror[0m] [0m  )[0m
+[0m[[31merror[0m] [0m)[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m== Expanded type of tree ==[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0mConstantType(value = Constant(play.api.templates.Html))[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0muncaught exception during compilation: java.io.FileNotFoundException[0m
+[0m[[31merror[0m] [0m/usr/share/scalaide/workspace/mplayer/target/scala-2.10/classes/views/html/main.class (Permission denied)[0m
+[0m[[31merror[0m] [0mtwo errors found[0m
+java.io.FileNotFoundException: /usr/share/scalaide/workspace/mplayer/target/scala-2.10/classes/views/html/main$$anonfun$f$1$$anonfun$apply$1.class (Permission denied)
+	at java.io.FileOutputStream.open(Native Method)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:221)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:171)
+	at sbt.Using$$anonfun$fileOutputChannel$1.apply(Using.scala:82)
+	at sbt.Using$$anonfun$fileOutputChannel$1.apply(Using.scala:82)
+	at sbt.Using$$anon$2.openImpl(Using.scala:72)
+	at sbt.OpenFile$class.open(Using.scala:46)
+	at sbt.Using$$anon$2.open(Using.scala:70)
+	at sbt.Using$$anon$2.open(Using.scala:70)
+	at sbt.Using.apply(Using.scala:24)
+	at sbt.IO$$anonfun$copyFile$3.apply(IO.scala:579)
+	at sbt.IO$$anonfun$copyFile$3.apply(IO.scala:578)
+	at sbt.Using.apply(Using.scala:25)
+	at sbt.IO$.copyFile(IO.scala:578)
+	at sbt.IO$.move(IO.scala:760)
+	at sbt.inc.ClassfileManager$$anonfun$transactional$1$$anon$2$$anonfun$complete$2.apply(ClassfileManager.scala:53)
+	at sbt.inc.ClassfileManager$$anonfun$transactional$1$$anon$2$$anonfun$complete$2.apply(ClassfileManager.scala:53)
+	at scala.collection.TraversableLike$WithFilter$$anonfun$foreach$1.apply(TraversableLike.scala:772)
+	at scala.collection.mutable.HashMap$$anonfun$foreach$1.apply(HashMap.scala:98)
+	at scala.collection.mutable.HashMap$$anonfun$foreach$1.apply(HashMap.scala:98)
+	at scala.collection.mutable.HashTable$class.foreachEntry(HashTable.scala:226)
+	at scala.collection.mutable.HashMap.foreachEntry(HashMap.scala:39)
+	at scala.collection.mutable.HashMap.foreach(HashMap.scala:98)
+	at scala.collection.TraversableLike$WithFilter.foreach(TraversableLike.scala:771)
+	at sbt.inc.ClassfileManager$$anonfun$transactional$1$$anon$2.complete(ClassfileManager.scala:53)
+	at sbt.inc.Incremental$.manageClassfiles(Incremental.scala:42)
+	at sbt.inc.Incremental$.compile(Incremental.scala:32)
+	at sbt.inc.IncrementalCompile$.apply(Compile.scala:26)
+	at sbt.compiler.AggressiveCompile.compile2(AggressiveCompile.scala:150)
+	at sbt.compiler.AggressiveCompile.compile1(AggressiveCompile.scala:70)
+	at sbt.compiler.AggressiveCompile.apply(AggressiveCompile.scala:45)
+	at sbt.Compiler$.apply(Compiler.scala:70)
+	at sbt.Defaults$.sbt$Defaults$$compileTaskImpl(Defaults.scala:722)
+	at sbt.Defaults$$anonfun$compileTask$1.apply(Defaults.scala:716)
+	at sbt.Defaults$$anonfun$compileTask$1.apply(Defaults.scala:716)
+	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47)
+	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:42)
+	at sbt.std.Transform$$anon$4.work(System.scala:64)
+	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237)
+	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237)
+	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:18)
+	at sbt.Execute.work(Execute.scala:244)
+	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237)
+	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237)
+	at sbt.ConcurrentRestrictions$$anon$4$$anonfun$1.apply(ConcurrentRestrictions.scala:160)
+	at sbt.CompletionService$$anon$2.call(CompletionService.scala:30)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:744)
+[0m[[31merror[0m] [0m(compile:[31mcompile[0m) java.io.FileNotFoundException: /usr/share/scalaide/workspace/mplayer/target/scala-2.10/classes/views/html/main$$anonfun$f$1$$anonfun$apply$1.class (Permission denied)[0m
+
+Cannot start with errors.
+

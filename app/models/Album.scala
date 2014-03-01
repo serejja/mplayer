@@ -14,7 +14,7 @@ case class Album(id: Long, name: String, year: Long, format: String, artist: Art
   }
 }
 
-object Albums {
+object Albums {  
   val columns = " al.id AS album$id, al.name AS album$name, al.issue_year AS album$issue_year, al.format AS album$format, " + Artists.columns
   private val from = " FROM albums al INNER JOIN artists a on al.artist_id = a.id INNER JOIN genres g on a.genre_id = g.id LEFT JOIN countries c ON a.country_id = c.id "
 
