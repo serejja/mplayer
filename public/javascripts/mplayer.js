@@ -33,6 +33,12 @@ function enableSearching() {
         var searchText = $('#searchtext').val();
         searchArtists(searchText);
     });
+
+    $('#searchtext').keyup(function(event) {
+    	if(event.keyCode == 13) {
+	        searchbutton.click();
+	    }
+	});
 }
 
 function updatePlayer(id){
